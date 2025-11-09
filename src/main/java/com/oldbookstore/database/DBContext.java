@@ -23,7 +23,7 @@ public class DBContext {
 
 	// --- THAY ĐỔI 3: DÙNG MẬT KHẨU "sa" ---
 	// Hãy thay "Mật_khẩu_SA_của_bạn" bằng mật khẩu bạn đã đặt
-	private static final String DB_PASSWORD = "Khang_11111"; // <-- THAY MẬT KHẨU CỦA BẠN VÀO ĐÂY
+	private static final String DB_PASSWORD = "123"; // <-- THAY MẬT KHẨU CỦA BẠN VÀO ĐÂY
 
 	public static Connection getConnection() throws SQLException {
 		try {
