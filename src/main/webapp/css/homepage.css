@@ -1,0 +1,238 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+/* --- 0. Biến và Thiết lập Chung --- */
+:root {
+    --main-green: #07805b; /* (Bạn có thể đổi #008080 thành màu xanh lá cây của logo) */
+    --light-cream: #FFFBF0; /* Màu kem của Nav */
+    --dark-text: #000000;
+    --light-text: #f9f9f9;
+}
+
+body {
+    background-color: #f7f9fc; /* Nền chung của trang */
+    color: var(--dark-text);
+    margin: 0;
+    /* (Bạn có thể import font chữ Google Fonts ở đây) */
+}
+
+
+/* Container chung để căn giữa nội dung */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* --- 1. Header Top (Thanh xanh đậm) --- */
+.header-top {
+    background-color: var(--main-green);
+    padding: 15px 0;
+}
+
+.logo-link {
+    text-decoration: none; /* Bỏ gạch chân link */
+}
+
+.logo-text {
+    font-family: 'Playfair Display', serif; /* <<< DÙNG FONT MỚI */
+    font-size: 40px;  /* Cỡ chữ logo (bạn có thể chỉnh) */
+    font-weight: 700; /* Độ đậm */
+    color: #73ff00; /* Màu trắng (giống ảnh mẫu) */
+    white-space: nowrap; /* Đảm bảo không xuống dòng */
+}
+
+/* Khu vực tìm kiếm */
+.search-area {
+    flex-grow: 1; /* Chiếm phần lớn không gian thừa */
+/*     margin-top: 20px; */
+    margin-right: 30px;
+    margin-left: 30px;
+/*     margin-bottom: 20px; */
+}
+
+.search-form {
+    display: flex;
+    background-color: #fff;
+    border-radius: 25px;
+    overflow: hidden;
+    /* max-width: 450px; */
+}
+
+.search-form input[type="text"] {
+    border: none;
+    padding: 12px 20px;
+    font-size: 14px;
+    flex-grow: 1;
+    outline: none;
+}
+
+.search-form button [type ="submit"]{
+    background-color: #ffffff; /* (Màu cam của nút tìm kiếm) */
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    margin-top: 0px;
+}
+
+.search-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Khu vực Người dùng (Đăng nhập/Giỏ hàng) */
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-area .nav-item {
+    color: var(--light-text);
+    /* text-decoration: none; none: xóa dấu gạch chân*/
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-icon {
+    width: 20px;
+    height: 20px;
+    /* (Bạn cần icon màu trắng) */
+}
+
+.cart-item {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* --- 2. Header Nav (Thanh kem) --- */
+.header-nav {
+    background-color: var(--light-cream);
+    border-bottom: 1px solid #e0e0e0;
+
+}
+
+.header-nav .nav-item {
+    color: var(--dark-text);
+    text-decoration: none;
+    /* padding: 20px 0;  */
+    margin-right: 30px;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.header-nav .nav-item.active,
+.header-nav .nav-item:hover {
+    color: var(--main-green);
+    border-bottom-color: var(--main-green);
+}
+
+.nav-hotline span {
+    font-size: 1.1em;
+    color: var(--dark-text);
+}
+
+/* --- 3. Main Banner --- */
+.main-banner {
+    width: 100%;
+}
+.main-banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- 4. Product Section --- */
+.product-section {
+    padding: 0px 0;/*khoảng cách giữa các class section  */
+}
+
+.product-section h2 {
+    text-align: left;
+    text-decoration: underline;
+    font-size: 2em;
+    /*color: var(--dark-text);*/
+    color: #07805b;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+/* (Các class .book-grid, .book-card... bạn giữ nguyên như cũ) */
+/* Đảm bảo chúng nằm trong file homepage.css này */
+.book-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.book-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    width: 220px; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+}
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+.book-card img {
+    width: 100%;
+    height: 300px; 
+    object-fit: cover;
+    border-radius: 5px;
+}
+.book-card h4 {
+    margin: 10px 0 5px 0;
+    height: 40px; 
+    overflow: hidden;
+    font-size: 1.1em;
+    color: #222;
+}
+.book-card .author {
+    margin: 5px 0;
+    color: gray;
+    font-size: 0.9em;
+}
+.book-card .price {
+    margin: 10px 0;
+    color: #e44d26;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+.book-card .btn-detail {
+    display: block;
+    text-align: center;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+.book-card .btn-detail:hover {
+    background-color: #0056b3;
+}
