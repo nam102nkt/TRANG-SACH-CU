@@ -47,7 +47,7 @@
 						<a href="profile.jsp" class="nav-item"> <img
 							src="${pageContext.request.contextPath}/images/user_icon.png"
 							alt="Tài khoản" class="nav-icon"> <span><c:out
-									value="${sessionScope.user.fullname}" /></span>
+									value="${sessionScope.user.fullName}"></c:out></span>
 						</a>
 						<a href="logout" class="nav-item"> <span>Đăng xuất</span>
 						</a>
