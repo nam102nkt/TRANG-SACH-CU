@@ -1,4 +1,4 @@
-package com.oldbookstore.model;
+package model;
 
 import java.math.BigDecimal; // Import lớp này
 

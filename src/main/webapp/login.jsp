@@ -9,8 +9,10 @@
 <title>Đăng nhập - BookMarket</title>
 <%-- Dòng này sẽ "gọi" toàn bộ CSS thiết kế 2 cột của bạn --%>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/homepage.css">
 </head>
 <body>
+<jsp:include page="header.jsp"></jsp:include>
 	<div class="container-wrapper">
 
 		<div class="image-panel">
@@ -27,7 +29,7 @@
 				</a>
 
 				<div class="app-logo">
-					<span class="logo-text">BOOK MARKET</span>
+					<span >BOOK MARKET</span>
 				</div>
 
 				<h3>Đăng nhập</h3>

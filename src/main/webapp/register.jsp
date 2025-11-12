@@ -8,8 +8,10 @@
 <meta charset="UTF-8">
 <title>Đăng ký tài khoản</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/homepage.css">
 </head>
 <body>
+<jsp:include page="header.jsp"></jsp:include>
     <div class="container-wrapper">
         <div class="image-panel">
             <img src="images/register_BookMarket.png" alt="Hình ảnh cửa hàng sách">
@@ -21,7 +23,7 @@
    	 			<img src="${pageContext.request.contextPath}/images/home.png" alt="Về trang chủ" class="home-icon">
 				</a>
                 <div class="app-logo">
-                    <span class="logo-text">BOOK MARKET</span>
+                    <span>BOOK MARKET</span>
                 </div>
 
                 <h3>Đăng ký tài khoản</h3>

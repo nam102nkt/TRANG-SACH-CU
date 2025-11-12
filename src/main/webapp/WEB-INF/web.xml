@@ -8,7 +8,7 @@
     <description></description>
     <display-name>LogoutServlet</display-name>
     <servlet-name>LogoutServlet</servlet-name>
-    <servlet-class>com.oldbookstore.controller.LogoutServlet</servlet-class>
+    <servlet-class>controller.LogoutServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LogoutServlet</servlet-name>
@@ -18,7 +18,7 @@
     <description></description>
     <display-name>HomeServlet</display-name>
     <servlet-name>HomeServlet</servlet-name>
-    <servlet-class>com.oldbookstore.controller.HomeServlet</servlet-class>
+    <servlet-class>controller.HomeServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>HomeServlet</servlet-name>

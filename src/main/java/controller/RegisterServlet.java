@@ -1,17 +1,18 @@
-package com.oldbookstore.controller;
-
-import com.oldbookstore.dao.IUserDAO;
-import com.oldbookstore.dao.UserDAOImpl;// chúng ta đang tự "new"
-import com.oldbookstore.model.User;
+package controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;// Annotation này cũng là 1 cách thay cho web.xml
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.User;
+
 import java.io.IOException;
 
 import org.mindrot.jbcrypt.BCrypt;
+
+import dao.IUserDAO;
+import dao.UserDAOImpl;
 
 /**
  * Servlet implementation class RegisterServlet

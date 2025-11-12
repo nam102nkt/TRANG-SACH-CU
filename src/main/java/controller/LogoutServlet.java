@@ -1,4 +1,4 @@
-package com.oldbookstore.controller;
+package controller;
 
 import java.io.IOException;
 
@@ -37,7 +37,7 @@ public class LogoutServlet extends HttpServlet {
         
         // 3. Chuyển hướng người dùng về trang chủ
         // Dùng sendRedirect để thay đổi URL trên trình duyệt
-        response.sendRedirect("index.jsp");
+        response.sendRedirect(request.getContextPath());
     }
 
     // Chúng ta không cần doPost cho chức năng logout

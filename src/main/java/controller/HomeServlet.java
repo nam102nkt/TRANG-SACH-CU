@@ -1,16 +1,17 @@
-package com.oldbookstore.controller;
+package controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Book;
+
 import java.io.IOException;
 import java.util.List;
 
-import com.oldbookstore.dao.BookDAOImpl;
-import com.oldbookstore.dao.IBookDAO;
-import com.oldbookstore.model.Book;
+import dao.BookDAOImpl;
+import dao.IBookDAO;
 
 /**
  * Servlet implementation class HomeServlet

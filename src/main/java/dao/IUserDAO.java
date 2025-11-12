@@ -1,6 +1,6 @@
-package com.oldbookstore.dao;
+package dao;
 
-import com.oldbookstore.model.User;
+import model.User;
 
 public interface IUserDAO {
 	public boolean register(User user);
