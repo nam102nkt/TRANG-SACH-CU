@@ -1,4 +1,4 @@
-package com.oldbookstore.model;
+package model;
 
 import java.io.Serializable;
 //Serializable là một "marker" interface, hữu ích khi làm việc với Session

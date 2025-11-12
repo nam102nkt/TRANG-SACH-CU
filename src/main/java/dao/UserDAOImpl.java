@@ -1,12 +1,13 @@
-package com.oldbookstore.dao;
+package dao;
 
-import com.oldbookstore.database.DBContext;
-import com.oldbookstore.model.User;
+import model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import database.DBContext;
 
 public class UserDAOImpl implements IUserDAO {
 

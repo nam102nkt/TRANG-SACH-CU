@@ -1,8 +1,4 @@
-package com.oldbookstore.controller;
-
-import com.oldbookstore.dao.IUserDAO;
-import com.oldbookstore.dao.UserDAOImpl;
-import com.oldbookstore.model.User;
+package controller;
 
 import java.io.IOException;
 
@@ -12,8 +8,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.User;
 
 import org.mindrot.jbcrypt.BCrypt; // <-- IMPORT BCrypt
+
+import dao.IUserDAO;
+import dao.UserDAOImpl;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -68,7 +68,7 @@ public class LoginServlet extends HttpServlet {
             session.setMaxInactiveInterval(30 * 60); // 30 phút * 60 giây
             
             // 4. Chuyển hướng về trang chủ
-            response.sendRedirect("index.jsp");
+            response.sendRedirect(request.getContextPath());
 
         } else {
             // === ĐĂNG NHẬP THẤT BẠI ===
