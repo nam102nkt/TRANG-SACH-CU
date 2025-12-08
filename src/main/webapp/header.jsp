@@ -33,7 +33,7 @@
 						</a>
 					</c:if>
 					<c:if test="${sessionScope.user != null}">
-						<a href="profile.jsp" class="nav-item"> <img
+						<a href="profile?tab=info" class="nav-item"> <img
 							src="${pageContext.request.contextPath}/images/user_icon.png"
 							alt="Tài khoản" class="nav-icon"> 
 							<span> <c:out value="${sessionScope.user.fullName}"></c:out>

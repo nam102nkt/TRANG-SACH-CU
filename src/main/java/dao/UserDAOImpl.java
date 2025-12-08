@@ -89,4 +89,23 @@ public class UserDAOImpl implements IUserDAO {
 		}
 		return null; // không tìm thấy User
 	}
+
+	@Override
+	public void updateUser(User user) {
+	    // Chỉ cập nhật Họ tên và Số điện thoại (Email thường không cho đổi)
+	    String sql = "UPDATE users SET fullname = ?, phone = ? WHERE id = ?";
+
+	    try (Connection conn = DBContext.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setString(1, user.getFullName());
+	        ps.setString(2, user.getPhone());
+	        ps.setInt(3, user.getId());
+
+	        ps.executeUpdate();
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
 }
