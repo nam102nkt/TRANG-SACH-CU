@@ -75,4 +75,78 @@ public class BookDAOImpl implements IBookDAO {
 		}
 		return book;
 	}
+
+    @Override
+    public java.util.List<Book> search(String keyword) {
+        java.util.List<Book> list = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
+        try (java.sql.Connection conn = database.DBContext.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            String k = "%" + keyword + "%";
+            ps.setString(1, k); ps.setString(2, k);
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Book b = new Book();
+                    b.setId(rs.getInt("id"));
+                    b.setTitle(rs.getString("title"));
+                    b.setAuthor(rs.getString("author"));
+                    b.setPrice(rs.getBigDecimal("price"));
+                    b.setImageUrl(rs.getString("image_url"));
+                    b.setDescription(rs.getString("description"));
+                    list.add(b);
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
+    }
+
+    @Override
+    public java.util.List<Book> filter(java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice, String condition) {
+        java.util.List<Book> list = new java.util.ArrayList<>();
+        StringBuilder sb = new StringBuilder("SELECT * FROM books WHERE 1=1");
+        if (minPrice != null) sb.append(" AND price >= ?");
+        if (maxPrice != null) sb.append(" AND price <= ?");
+        if (condition != null && !condition.isEmpty()) sb.append(" AND condition = ?");
+        try (java.sql.Connection conn = database.DBContext.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sb.toString())) {
+            int idx = 1;
+            if (minPrice != null) ps.setBigDecimal(idx++, minPrice);
+            if (maxPrice != null) ps.setBigDecimal(idx++, maxPrice);
+            if (condition != null && !condition.isEmpty()) ps.setString(idx++, condition);
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Book b = new Book();
+                    b.setId(rs.getInt("id"));
+                    b.setTitle(rs.getString("title"));
+                    b.setAuthor(rs.getString("author"));
+                    b.setPrice(rs.getBigDecimal("price"));
+                    b.setImageUrl(rs.getString("image_url"));
+                    b.setDescription(rs.getString("description"));
+                    list.add(b);
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
+    }
+
+    @Override
+    public int insertBook(Book b) {
+        String sql = "INSERT INTO books(title,author,price,description,image_url,condition,seller_id) VALUES(?,?,?,?,?,?,?)";
+        try (java.sql.Connection conn = database.DBContext.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, b.getTitle());
+            ps.setString(2, b.getAuthor());
+            ps.setBigDecimal(3, b.getPrice());
+            ps.setString(4, b.getDescription());
+            ps.setString(5, b.getImageUrl());
+            ps.setString(6, null); // condition optional
+            ps.setInt(7, 0); // sellerId unknown here; ensure to set before calling
+            int affected = ps.executeUpdate();
+            try (java.sql.ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return -1;
+    }
+
 }
