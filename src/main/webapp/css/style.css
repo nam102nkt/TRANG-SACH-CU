@@ -1,211 +1,265 @@
 @charset "UTF-8";
-    /* 1. Reset và cài đặt cơ bản */
-    html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%; 
-        /*font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Phông chữ hiện đại hơn */
-        background-color: #f7f9fc; /* Màu nền nhẹ cho toàn trang */
-    }
-    .home-icon {
-    width: 32px;  
-    height: 32px; 
-    opacity: 0.6; /* Hơi mờ đi (trạng thái bình thường) */
-    transition: opacity 0.3s ease;
-	}
-	.back-link {
-    /* === DI CHUYỂN CODE ĐỊNH VỊ VÀO ĐÂY === */
-    position: absolute; /* Luôn luôn ở vị trí này */
-    top: 25px;          
-    left: 25px;         
-    text-decoration: none; 
-    z-index: 10; 
-    line-height: 0; /* Giúp căn chỉnh ảnh chuẩn hơn */
-    
-    /* === Code "Ghim" và "Làm mượt" === */
-    transform: translateY(0);
-    transition: transform 0.1s ease; 
-	}
-    .back-link:hover .home-icon {
-    opacity: 1; /* Rõ nét khi di chuột (max là 1) */
-    /* KHÔNG CÒN position: absolute ở đây nữa */
-	}
-    .back-link:active {
-    transform: translateY(1px); /* Lún xuống 1px khi nhấn */
-	}
+/* 1. Reset và cài đặt cơ bản */
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	/*font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Phông chữ hiện đại hơn */
+	background-color: #f7f9fc; /* Màu nền nhẹ cho toàn trang */
+}
 
-    /* 2. Container chính (wrapper) */
-    .container-wrapper {
-        display: flex;
-        width: 100%;
-        min-height: 100%;
-        overflow: hidden; /* Ngăn chặn cuộn nếu ảnh quá lớn */
-    }
-    
-    /* 3. Cột bên trái (Hình ảnh) */
-    .image-panel {
-        flex: 1.75; /* Chiếm 1 phần */
-        display: flex; /* Dùng flex để căn giữa ảnh nếu ảnh nhỏ */
-        justify-content: center;
-        align-items: center;
-        background-color: #f0f0f0; 
-        position: relative; /* Dùng cho overlay hoặc hiệu ứng khác */
-    }
-    .image-panel img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; 
-        display: block; /* Loại bỏ khoảng trắng dưới ảnh */
-    }
+.home-icon {
+	width: 32px;
+	height: 32px;
+	opacity: 0.6; /* Hơi mờ đi (trạng thái bình thường) */
+	transition: opacity 0.3s ease;
+}
 
-    /* 4. Cột bên phải (Form Panel) */
+.back-link {
+	/* === DI CHUYỂN CODE ĐỊNH VỊ VÀO ĐÂY === */
+	position: absolute; /* Luôn luôn ở vị trí này */
+	top: 25px;
+	left: 25px;
+	text-decoration: none;
+	z-index: 10;
+	line-height: 0; /* Giúp căn chỉnh ảnh chuẩn hơn */
+	/* === Code "Ghim" và "Làm mượt" === */
+	transform: translateY(0);
+	transition: transform 0.1s ease;
+}
+
+.back-link:hover .home-icon {
+	opacity: 1; /* Rõ nét khi di chuột (max là 1) */
+	/* KHÔNG CÒN position: absolute ở đây nữa */
+}
+
+.back-link:active {
+	transform: translateY(1px); /* Lún xuống 1px khi nhấn */
+}
+
+/* 2. Container chính (wrapper) */
+.container-wrapper {
+	display: flex;
+	width: 100%;
+	min-height: 100%;
+	overflow: hidden; /* Ngăn chặn cuộn nếu ảnh quá lớn */
+}
+
+/* 3. Cột bên trái (Hình ảnh) */
+.image-panel {
+	flex: 1.75; /* Chiếm 1 phần */
+	display: flex; /* Dùng flex để căn giữa ảnh nếu ảnh nhỏ */
+	justify-content: center;
+	align-items: center;
+	background-color: #f0f0f0;
+	position: relative; /* Dùng cho overlay hoặc hiệu ứng khác */
+}
+
+.image-panel img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block; /* Loại bỏ khoảng trắng dưới ảnh */
+}
+
+/* 4. Cột bên phải (Form Panel) */
 .form-panel {
-    flex: 1; 
-    display: flex;
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    align-items: center;   /* CĂN GIỮA THEO CHIỀU DỌC */
-    padding: 20px 40px; /* Giảm padding trên/dưới */
-    box-sizing: border-box; 
-    background-color: #fff; 
-    position: relative; 
-    overflow-y: auto; /* Vẫn giữ cái này để an toàn */
+	flex: 1;
+	display: flex;
+	justify-content: center; /* Căn giữa theo chiều ngang */
+	align-items: center; /* CĂN GIỮA THEO CHIỀU DỌC */
+	padding: 20px 40px; /* Giảm padding trên/dưới */
+	box-sizing: border-box;
+	background-color: #fff;
+	position: relative;
+	overflow-y: auto; /* Vẫn giữ cái này để an toàn */
 }
 
 /* 5. Thẻ bao bọc Form (form-card) */
 .form-card {
 	position: relative;
-    background-color: #ffffff;
-    padding: 20px; /* Giảm padding từ 30px -> 25px */
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08); 
-    max-width: 450px; 
-    width: 100%;
-    /* XÓA BỎ 'margin-top: 50px;' vì .form-panel đã căn giữa */
+	background-color: #ffffff;
+	padding: 20px; /* Giảm padding từ 30px -> 25px */
+	border-radius: 12px;
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+	max-width: 450px;
+	width: 100%;
+	/* XÓA BỎ 'margin-top: 50px;' vì .form-panel đã căn giữa */
 }
 
-    /* Logo và tiêu đề ứng dụng */
-    .app-logo {
-        display: flex;
-        align-items: center;
-        justify-content: center; /* Căn giữa logo */
-        margin-bottom: 5px;
-        font-size: 22px;
-        font-weight: bold;
-        color: #007bff; /* Màu xanh của logo */
-    }
-    .logo-image {
-        height: 30px; /* Kích thước logo hình ảnh */
-        margin-right: 10px;
-    }
+/* Logo và tiêu đề ứng dụng */
+.app-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center; /* Căn giữa logo */
+	margin-bottom: 5px;
+	font-size: 22px;
+	font-weight: bold;
+	color: #007bff; /* Màu xanh của logo */
+}
 
-    .form-card h3 {
-        text-align: center;
-        color: #333;
-        margin-top: 1px;
-        margin-bottom: 1px;
-        font-size: 22px;
-        font-weight: 600;
-    }
-    .form-card .subtitle {
-        text-align: center;
-        color: #777;
-        margin-top:1px;
-        margin-bottom: 15px;
-        font-size: 12px;
-    }
+.logo-image {
+	height: 30px; /* Kích thước logo hình ảnh */
+	margin-right: 10px;
+}
 
-    /* Thông báo lỗi */
-    .error-message {
-        color: #e74c3c; /* Màu đỏ nổi bật hơn */
-        font-weight: 500;
-        text-align: center;
-        margin-bottom: 20px;
-    }
+.form-card h3 {
+	text-align: center;
+	color: #333;
+	margin-top: 1px;
+	margin-bottom: 1px;
+	font-size: 22px;
+	font-weight: 600;
+}
 
-    /* Các nhóm input (label + input) */
-    .input-group { 
-        margin-bottom: 12px; /* Tăng khoảng cách giữa các nhóm input */
-    }
-    .input-group label { 
-        display: block; 
-        margin-bottom: 4px; /* Tăng khoảng cách giữa label và input */
-        font-weight: 500; /* Độ đậm vừa phải */
-        color: #555;
-        font-size: 14px;
-    }
-    .input-group input[type="text"], 
-    .input-group input[type="email"], 
-    .input-group input[type="password"] {
-        width: 100%; 
-        padding: 10px 12px; /* Tăng padding để ô input cao hơn */
-        box-sizing: border-box;
-        border: 1px solid #ddd; /* Viền màu nhạt hơn */
-        border-radius: 6px; /* Bo tròn góc input */
-        font-size: 14px;
-        transition: border-color 0.3s ease; /* Hiệu ứng chuyển động khi focus */
-        background-color: #f9fbfd; /* Nền input hơi xám */
-    }
-    .input-group input:focus {
-        outline: none; /* Xóa viền focus mặc định */
-        border-color: #007bff; /* Viền xanh khi focus */
-        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15); /* Bóng đổ nhẹ khi focus */
-    }
-    .input-group input::placeholder {
-        color: #aab;
-    }
+.form-card .subtitle {
+	text-align: center;
+	color: #777;
+	margin-top: 1px;
+	margin-bottom: 15px;
+	font-size: 12px;
+}
 
-    /* Nút Đăng ký */
-    button[type="submit"] { 
-        width: 100%;
-        padding: 10px 20px; 
-        background-color: #007bff; 
-        color: white; 
-        border: none; 
-        border-radius: 6px; /* Bo tròn góc nút */
-        cursor: pointer; 
-        font-size: 15px;
-        font-weight: bold;
-        margin-top: 10px; /* Khoảng cách với input cuối */
-        transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng hover */
-    }
-    button[type="submit"]:hover {
-        background-color: #0056b3; /* Màu đậm hơn khi hover */
-        transform: translateY(-2px); /* Nâng nút lên một chút khi hover */
-    }
-    button[type="submit"]:active {
-        transform: translateY(0); /* Trở về vị trí ban đầu khi click */
-    }
+/* Thông báo lỗi */
+.error-message {
+	color: #e74c3c; /* Màu đỏ nổi bật hơn */
+	font-weight: 500;
+	text-align: center;
+	margin-bottom: 20px;
+}
 
-    /* Link Đăng nhập ngay */
-    .login-link {
-        text-align: center;
-        margin-top: 15px;
-        font-size: 14px;
-        color: #666;
-    }
-    .login-link a {
-        color: #007bff;
-        text-decoration: none; /* Xóa gạch chân */
-        font-weight: 500;
-        transition: color 0.2s ease;
-    }
-    .login-link a:hover {
-        text-decoration: underline; /* Gạch chân khi hover */
-        color: #0056b3;
-    }
+/* Các nhóm input (label + input) */
+.input-group {
+	margin-bottom: 12px; /* Tăng khoảng cách giữa các nhóm input */
+}
 
-    /* Scrollbar tùy chỉnh */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #888;
-      border-radius: 10px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #555;
-    }
+.input-group label {
+	display: block;
+	margin-bottom: 4px; /* Tăng khoảng cách giữa label và input */
+	font-weight: 500; /* Độ đậm vừa phải */
+	color: #555;
+	font-size: 14px;
+}
+
+.input-group input[type="text"], .input-group input[type="email"],
+	.input-group input[type="password"] {
+	width: 100%;
+	padding: 10px 12px; /* Tăng padding để ô input cao hơn */
+	box-sizing: border-box;
+	border: 1px solid #ddd; /* Viền màu nhạt hơn */
+	border-radius: 6px; /* Bo tròn góc input */
+	font-size: 14px;
+	transition: border-color 0.3s ease;
+	/* Hiệu ứng chuyển động khi focus */
+	background-color: #f9fbfd; /* Nền input hơi xám */
+}
+
+.input-group input:focus {
+	outline: none; /* Xóa viền focus mặc định */
+	border-color: #007bff; /* Viền xanh khi focus */
+	box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+	/* Bóng đổ nhẹ khi focus */
+}
+
+.input-group input::placeholder {
+	color: #aab;
+}
+
+/* Nút Đăng ký */
+button[type="submit"] {
+	width: 100%;
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 6px; /* Bo tròn góc nút */
+	cursor: pointer;
+	font-size: 15px;
+	font-weight: bold;
+	margin-top: 10px; /* Khoảng cách với input cuối */
+	transition: background-color 0.3s ease, transform 0.2s ease;
+	/* Hiệu ứng hover */
+}
+
+button[type="submit"]:hover {
+	background-color: #0056b3; /* Màu đậm hơn khi hover */
+	transform: translateY(-2px); /* Nâng nút lên một chút khi hover */
+}
+
+button[type="submit"]:active {
+	transform: translateY(0); /* Trở về vị trí ban đầu khi click */
+}
+
+/* Link Đăng nhập ngay */
+.login-link {
+	text-align: center;
+	margin-top: 15px;
+	font-size: 14px;
+	color: #666;
+}
+
+.login-link a {
+	color: #007bff;
+	text-decoration: none; /* Xóa gạch chân */
+	font-weight: 500;
+	transition: color 0.2s ease;
+}
+
+.login-link a:hover {
+	text-decoration: underline; /* Gạch chân khi hover */
+	color: #0056b3;
+}
+
+/* Scrollbar tùy chỉnh */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #888;
+	border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+.container {
+	width: 85%;
+	margin: auto;
+}
+/* Footer Styles */
+.site-footer {
+    background-color: #07805b;
+    color: white;
+    padding: 40px 0;
+    margin-top: 50px;
+}
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+}
+.footer-column h3 {
+    border-bottom: 2px solid #055a40;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.footer-column ul { list-style: none; padding: 0; }
+.footer-column li { margin-bottom: 10px; }
+.footer-column a { color: #e0e0e0; text-decoration: none; }
+.footer-column a:hover { color: white; text-decoration: underline; }
+.copyright {
+    text-align: center;
+    margin-top: 30px;
+    border-top: 1px solid #055a40;
+    padding-top: 20px;
+    font-size: 0.9em;
+}

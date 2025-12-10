@@ -10,7 +10,7 @@
     <c:otherwise>
       <div class="book-grid">
         <c:forEach var="id" items="${sessionScope.wl}">
-          <c:set var="book" value="${pageContext.request.getAttribute('book_'+id)}" />
+          
           <c:if test="${empty book}">
             <!-- fallback: try to fetch via BookDAOImpl in servlet (recommended) -->
             <div>Book id: ${id} - <a href="book?id=${id}">Xem</a> - <a href="wishlist?action=remove&id=${id}">Xóa</a></div>
