@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+:root { 
+	--main-green: #07805b;
+}
+
+.wishlist-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 20px;
+	padding: 20px;
+}
+
+.wish-card {
+	background: #fff;
+	padding: 15px;
+	border-radius: 12px;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wish-card img {
+	width: 100%;
+	border-radius: 8px;
+}

@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+:root { 
+	--main-green: #07805b;
+}
+
+.sell-form {
+	max-width: 700px;
+	margin: auto;
+	background: #fff;
+	padding: 25px;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.sell-form input, .sell-form textarea {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 15px;
+	border-radius: 8px;
+	border: 1px solid #ccc;
+}

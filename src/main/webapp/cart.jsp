@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Giỏ hàng của bạn</title>
+<title>Giỏ Hàng</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/homepage.css">
 <link rel="stylesheet" href="css/cart.css">
