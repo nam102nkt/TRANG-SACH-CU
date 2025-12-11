@@ -1,0 +1,14 @@
+# --- RÁC CỦA ECLIPSE (Code đã biên dịch) ---
+# Tránh đẩy file .class, thư mục build/bin lên github
+/build/
+/bin/
+*.class
+
+# --- RÁC CỦA HỆ ĐIỀU HÀNH ---
+# File quản lý icon, vị trí trên macOS
+.DS_Store
+
+# File cache ảnh của Windows
+Thumbs.db
+
+#---giúp github phớt lờ các file "rác" này tránh nhiễm khi commit lên github 
