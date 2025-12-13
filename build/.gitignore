@@ -12,3 +12,4 @@
 Thumbs.db
 
 #---giúp github phớt lờ các file "rác" này tránh nhiễm khi commit lên github 
+/classes/

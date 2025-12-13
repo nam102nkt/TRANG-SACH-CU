@@ -21,7 +21,7 @@ public class OrderDAOImpl implements IOrderDAO {
 			try (java.sql.PreparedStatement ps = conn.prepareStatement(sqlOrder,
 					java.sql.Statement.RETURN_GENERATED_KEYS)) {
 				ps.setInt(1, o.getUserId());
-				ps.setDouble(2, o.getTotalPrice());
+				ps.setBigDecimal(2, o.getTotalPrice());
 				ps.setString(3, o.getStatus());
 				ps.executeUpdate();
 				int orderId = -1;
@@ -36,7 +36,7 @@ public class OrderDAOImpl implements IOrderDAO {
 						psd.setInt(1, orderId);
 						psd.setInt(2, d.getBookId());
 						psd.setInt(3, d.getQuantity());
-						psd.setDouble(4, d.getPrice());
+						psd.setBigDecimal(4, d.getPrice());
 						psd.addBatch();
 					}
 					psd.executeBatch();
@@ -63,7 +63,7 @@ public class OrderDAOImpl implements IOrderDAO {
 					Order o = new Order();
 					o.setId(rs.getInt("id"));
 					o.setUserId(rs.getInt("user_id"));
-					o.setTotalPrice(rs.getDouble("total_price"));
+					o.setTotalPrice(rs.getBigDecimal("total_price"));
 					o.setStatus(rs.getString("status"));
 					// details omitted for brevity
 					list.add(o);

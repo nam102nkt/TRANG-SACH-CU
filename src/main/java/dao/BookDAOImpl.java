@@ -35,6 +35,7 @@ public class BookDAOImpl implements IBookDAO {
 				book.setAuthor(rs.getString("author"));
 				book.setPrice(rs.getBigDecimal("price"));
 				book.setImageUrl(rs.getString("image_url"));
+				book.setStatus(rs.getString("status"));
 
 				// Thêm sách vào danh sách
 				books.add(book);
@@ -131,7 +132,7 @@ public class BookDAOImpl implements IBookDAO {
 
     @Override
     public int insertBook(Book b) {
-        String sql = "INSERT INTO books(title,author,price,description,image_url,condition,seller_id) VALUES(?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO books(title,author,price,description,image_url,condition,status,seller_id) VALUES(?,?,?,?,?,?,?)";
         try (java.sql.Connection conn = database.DBContext.getConnection();
              java.sql.PreparedStatement ps = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, b.getTitle());
@@ -139,9 +140,14 @@ public class BookDAOImpl implements IBookDAO {
             ps.setBigDecimal(3, b.getPrice());
             ps.setString(4, b.getDescription());
             ps.setString(5, b.getImageUrl());
-            ps.setString(6, null); // condition optional
-            ps.setInt(7, 0); // sellerId unknown here; ensure to set before calling
-            int affected = ps.executeUpdate();
+            ps.setString(6, "Used"); // Ví dụ mặc định
+            
+            // QUAN TRỌNG: Mặc định là PENDING (Chờ duyệt)
+            ps.setString(7, "PENDING"); 
+            
+            // QUAN TRỌNG: Phải lấy ID của người đang đăng nhập (từ Session)
+            // Hiện tại tạm thời để b.getSellerId() (Bạn phải set cái này từ Servlet)
+            ps.setInt(8, b.getSellerId());int affected = ps.executeUpdate();
             try (java.sql.ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) return rs.getInt(1);
             }

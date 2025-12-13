@@ -1,31 +1,40 @@
 package model;
+import java.math.BigDecimal;
 
-/**
- * OrderDetail represents one line in an order:
- * bookId, quantity, price (price per book at time of purchase)
- */
 public class OrderDetail {
+    private int id;         // ID của dòng chi tiết (tương ứng DB)
+    private int orderId;    // Cần thêm cái này để map với DB
     private int bookId;
     private int quantity;
-    private double price;
+    private BigDecimal price; // Đổi từ double sang BigDecimal
 
-    public OrderDetail(){}
+    public OrderDetail() {}
 
-    public OrderDetail(int bookId, int quantity, double price){
+    // Constructor dùng khi lưu đơn hàng
+    public OrderDetail(int bookId, int quantity, BigDecimal price) {
         this.bookId = bookId;
         this.quantity = quantity;
         this.price = price;
     }
 
-    public int getBookId(){ return bookId; }
-    public void setBookId(int bookId){ this.bookId = bookId; }
+    // Getters Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    
+    public int getOrderId() { return orderId; }
+    public void setOrderId(int orderId) { this.orderId = orderId; }
 
-    public int getQuantity(){ return quantity; }
-    public void setQuantity(int quantity){ this.quantity = quantity; }
+    public int getBookId() { return bookId; }
+    public void setBookId(int bookId) { this.bookId = bookId; }
 
-    public double getPrice(){ return price; }
-    public void setPrice(double price){ this.price = price; }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    /** Total for the line = price * quantity */
-    public double getLineTotal(){ return price * quantity; }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) { this.price = price; }
+    
+    // Tính tổng tiền dòng này: price * quantity
+    public BigDecimal getLineTotal() {
+        return price.multiply(new BigDecimal(quantity));
+    }
 }
