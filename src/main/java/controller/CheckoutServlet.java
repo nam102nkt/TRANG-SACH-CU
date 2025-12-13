@@ -11,6 +11,7 @@ import model.OrderDetail;
 import model.User;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,14 +48,14 @@ public class CheckoutServlet extends jakarta.servlet.http.HttpServlet {
         order.setStatus("pending");
 
         List<OrderDetail> details = new ArrayList<>();
-        double total = 0.0;
+        BigDecimal total = BigDecimal.ZERO;
         for (CartItem ci : cart.getItems()) {
             OrderDetail d = new OrderDetail();
             d.setBookId(ci.getBook().getId());
             d.setQuantity(ci.getQuantity());
-            d.setPrice(ci.getBook().getPrice().doubleValue());
+            d.setPrice(ci.getBook().getPrice());
             details.add(d);
-            total += d.getLineTotal();
+            total = total.add(d.getLineTotal());
         }
         order.setDetails(details);
         order.setTotalPrice(total);

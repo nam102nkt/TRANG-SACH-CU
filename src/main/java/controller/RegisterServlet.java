@@ -56,6 +56,11 @@ public class RegisterServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		String phone = request.getParameter("phone");
+		// lấy role người dùng chọn(là null thì mặc định là BUYER)
+		String role = request.getParameter("role");
+		if(role == null || !role.equals("SELLER")) {
+			role = "BUYER";// chỉ cho phép đăng ký 2 quyền BUYER or SELLER
+		}
 		
 		// 2. Tạo đối tượng User (JavaBean)
 		User newUser = new User();
@@ -66,7 +71,7 @@ public class RegisterServlet extends HttpServlet {
 		String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(12));
 		newUser.setPassword(hashedPassword);
 		newUser.setPhone(phone);
-		// role sẽ tự động là buyer theo logic trong DAO
+		newUser.setRole(role);
 		
 		// 3. Gọi DAO để thực hiện logic nghiệp vụ
 		boolean isSuccess = false;
