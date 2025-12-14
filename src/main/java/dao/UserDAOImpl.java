@@ -20,7 +20,7 @@ public class UserDAOImpl implements IUserDAO {
 		
 		// cài mặc định vai trò "buyer" nếu chưa set
 		String role = (user.getRole()==null || user.getRole().isEmpty()? "buyer" : user.getRole());
-		String hashed = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+
 		// giải quyết khó khăn( Quy tắc 3): Quản lý tài nguyên JDBC thủ công
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -32,7 +32,7 @@ public class UserDAOImpl implements IUserDAO {
 			// Set các tham số cho các câu lệnh SQL
 			ps.setString(1, user.getFullName());
 			ps.setString(2, user.getEmail());
-			ps.setString(3, hashed);// mã hóa password
+			ps.setString(3, user.getPassword());// password đã được mã hóa ở phần đăng ký(reServlet.java)
 			ps.setString(4, user.getPhone());
 			ps.setString(5, role);
 			// Thực thi câu lệnh

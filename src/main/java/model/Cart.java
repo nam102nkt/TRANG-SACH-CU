@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -15,7 +16,7 @@ import java.util.Map;
  *  - getTotal(): BigDecimal sum of item totals
  *  - clear(): empty cart
  */
-public class Cart {
+public class Cart implements Serializable{
     private Map<Integer, CartItem> items = new LinkedHashMap<>();
 
     public Cart(){}

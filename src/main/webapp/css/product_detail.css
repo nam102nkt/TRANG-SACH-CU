@@ -1,0 +1,148 @@
+@charset "UTF-8";
+
+/* Container chính cho trang chi tiết */
+.detail-container {
+    display: flex;
+    gap: 40px; /* Khoảng cách giữa ảnh và thông tin */
+    max-width: 1200px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+}
+
+/* --- CỘT BÊN TRÁI (Ảnh) --- */
+.product-gallery {
+    flex: 1; /* Chiếm 1 phần */
+    max-width: 450px;
+}
+
+.product-gallery-main img {
+    width: 100%;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* (Chúng ta sẽ thêm JS cho thumbnails sau) */
+.product-gallery-thumbnails {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.product-gallery-thumbnails img {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+.product-gallery-thumbnails img:hover {
+    border-color: var(--main-green);
+}
+
+/* --- CỘT BÊN PHẢI (Thông tin) --- */
+.product-info {
+    flex: 1.5; /* Chiếm 1.5 phần (rộng hơn) */
+}
+
+/* Tên sách */
+.product-info .product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8em;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--dark-text);
+}
+
+/* Tác giả */
+.product-info .product-author {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Giá tiền */
+.product-info .product-price {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #e44d26; /* Màu đỏ cam (giống trang chủ) */
+    margin-bottom: 20px;
+}
+
+/* Tình trạng */
+.product-info .product-availability {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+/* Bộ chọn số lượng */
+.quantity-selector {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+.quantity-selector label {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-right: 15px;
+}
+.quantity-selector input[type="number"] {
+    width: 60px;
+    text-align: center;
+    font-size: 1.2em;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Nút Thêm vào giỏ & Mua ngay */
+.product-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-add-to-cart, .btn-buy-now {
+    flex: 1; /* 2 nút rộng bằng nhau */
+    padding: 15px 20px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.btn-add-to-cart {
+    background-color: var(--main-green);
+    color: white;
+}
+.btn-buy-now {
+    background-color: #f0f0f0;
+    color: var(--dark-text);
+    border: 1px solid #ccc;
+}
+.btn-add-to-cart:hover, .btn-buy-now:hover {
+    opacity: 0.85;
+}
+
+/* Mô tả sản phẩm */
+.product-description {
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+.product-description h3 {
+    font-size: 1.5em;
+}
+.product-description p {
+    line-height: 1.7;
+    color: #444;
+}

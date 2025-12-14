@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -8,19 +9,33 @@ import java.math.BigDecimal;
  * Methods:
  *  - getTotal(): return total price for this item (price * quantity)
  */
-public class CartItem {
+public class CartItem implements Serializable {
+
     private Book book;
     private int quantity;
 
     public CartItem() {}
 
-    public CartItem(Book b, int q){ this.book=b; this.quantity=q; }
+    public CartItem(Book book, int quantity) {
+        this.book = book;
+        this.quantity = quantity;
+    }
 
-    public Book getBook(){ return book; }
-    public void setBook(Book b){ this.book = b; }
+    public Book getBook() {
+        return book;
+    }
 
-    public int getQuantity(){ return quantity; }
-    public void setQuantity(int q){ this.quantity = q; }
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     /**
      * Return total price for this CartItem as BigDecimal.

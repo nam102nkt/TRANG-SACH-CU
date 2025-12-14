@@ -228,9 +228,9 @@ button[type="submit"]:active {
 ::-webkit-scrollbar-thumb:hover {
 	background: #555;
 }
-
+/*chỉnh width = 100% để hiển thị full màn hình*/
 .container {
-	width: 85%;
+	width: 100%;
 	margin: auto;
 }
 /* Footer Styles */

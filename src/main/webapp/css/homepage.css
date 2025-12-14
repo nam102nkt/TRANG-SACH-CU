@@ -1,57 +1,65 @@
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+/* Import font Playfair (cho Logo/Tiêu đề) và Roboto (cho Nội dung) */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700&display=swap');
 
 /* --- 0. Biến và Thiết lập Chung --- */
 :root {
-    --main-green: #07805b; /* (Bạn có thể đổi #008080 thành màu xanh lá cây của logo) */
-    --light-cream: #FFFBF0; /* Màu kem của Nav */
+    /* -- BIẾN CŨ CỦA BẠN (GIỮ NGUYÊN) -- */
+    --main-green: #07805b; 
+    --light-cream: #FFFBF0;
     --dark-text: #000000;
     --light-text: #f9f9f9;
+    
+    /* -- BIẾN MỚI CHO GIAO DIỆN MẪU A -- */
+    --price-red: #d32f2f;
+    --text-gray: #666;
+    --card-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    --hover-shadow: 0 15px 30px rgba(0,0,0,0.15);
 }
 
 body {
-    background-color: #f7f9fc; /* Nền chung của trang */
+    background-color: #f7f9fc;
     color: var(--dark-text);
     margin: 0;
-    /* (Bạn có thể import font chữ Google Fonts ở đây) */
+    font-family: 'Roboto', sans-serif; /* Dùng font hiện đại cho nội dung */
 }
 
-
-/* Container chung để căn giữa nội dung */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
-    display: flex;
+    /* Lưu ý: Flex ở đây có thể ảnh hưởng đến các section khác, 
+       nhưng tôi giữ nguyên vì header của bạn cần nó */
+    display: flex; 
     justify-content: space-between;
     align-items: center;
 }
 
-/* --- 1. Header Top (Thanh xanh đậm) --- */
+/* ==========================================================================
+   PHẦN 1: HEADER (GIỮ NGUYÊN CODE CŨ CỦA BẠN)
+   ========================================================================== */
+
+/* --- Header Top (Thanh xanh đậm) --- */
 .header-top {
     background-color: var(--main-green);
     padding: 15px 0;
 }
 
-.logo-link {
-    text-decoration: none; /* Bỏ gạch chân link */
-}
+.logo-link { text-decoration: none; }
 
 .logo-text {
-    font-family: 'Playfair Display', serif; /* <<< DÙNG FONT MỚI */
-    font-size: 40px;  /* Cỡ chữ logo (bạn có thể chỉnh) */
-    font-weight: 700; /* Độ đậm */
-    color: #73ff00; /* Màu trắng (giống ảnh mẫu) */
-    white-space: nowrap; /* Đảm bảo không xuống dòng */
+    font-family: 'Playfair Display', serif;
+    font-size: 40px; 
+    font-weight: 700;
+    color: #73ff00;
+    white-space: nowrap;
 }
 
 /* Khu vực tìm kiếm */
 .search-area {
-    flex-grow: 1; /* Chiếm phần lớn không gian thừa */
-/*     margin-top: 20px; */
+    flex-grow: 1;
     margin-right: 30px;
     margin-left: 30px;
-/*     margin-bottom: 20px; */
 }
 
 .search-form {
@@ -59,7 +67,6 @@ body {
     background-color: #fff;
     border-radius: 25px;
     overflow: hidden;
-    /* max-width: 450px; */
 }
 
 .search-form input[type="text"] {
@@ -70,20 +77,18 @@ body {
     outline: none;
 }
 
-.search-form button [type ="submit"]{
-    background-color: #ffffff; /* (Màu cam của nút tìm kiếm) */
+/* Đã sửa lỗi cú pháp nhỏ ở đây: button[type="submit"] */
+.search-form button {
+    background-color: #ffffff;
     border: none;
     padding: 0 20px;
     cursor: pointer;
     margin-top: 0px;
 }
 
-.search-icon {
-    width: 20px;
-    height: 20px;
-}
+.search-icon { width: 20px; height: 20px; }
 
-/* Khu vực Người dùng (Đăng nhập/Giỏ hàng) */
+/* Khu vực Người dùng */
 .user-area {
     display: flex;
     align-items: center;
@@ -92,23 +97,16 @@ body {
 
 .user-area .nav-item {
     color: var(--light-text);
-    /* text-decoration: none; none: xóa dấu gạch chân*/
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 14px;
     font-weight: 500;
+    text-decoration: none; /* Bỏ gạch chân */
 }
 
-.nav-icon {
-    width: 20px;
-    height: 20px;
-    /* (Bạn cần icon màu trắng) */
-}
-
-.cart-item {
-    position: relative;
-}
+.nav-icon { width: 20px; height: 20px; }
+.cart-item { position: relative; }
 
 .cart-count {
     position: absolute;
@@ -122,21 +120,20 @@ body {
     font-weight: bold;
 }
 
-/* --- 2. Header Nav (Thanh kem) --- */
+/* --- Header Nav (Thanh kem) --- */
 .header-nav {
     background-color: var(--light-cream);
     border-bottom: 1px solid #e0e0e0;
-
 }
 
 .header-nav .nav-item {
     color: var(--dark-text);
     text-decoration: none;
-    /* padding: 20px 0;  */
     margin-right: 30px;
     font-weight: 600;
     border-bottom: 3px solid transparent;
     transition: border-color 0.3s ease;
+    padding: 20px 0; /* Bỏ comment để nav đẹp hơn */
 }
 
 .header-nav .nav-item.active,
@@ -150,89 +147,187 @@ body {
     color: var(--dark-text);
 }
 
-/* --- 3. Main Banner --- */
-.main-banner {
-    width: 100%;
-}
+/* --- Main Banner --- */
+.main-banner { width: 100%; }
 .main-banner img {
     width: 100%;
     height: auto;
     display: block;
 }
 
-/* --- 4. Product Section --- */
+
+/* ==========================================================================
+   PHẦN 2: GIAO DIỆN SẢN PHẨM MỚI (MẪU A - SANG TRỌNG)
+   ========================================================================== */
+
 .product-section {
-    padding: 0px 0;/*khoảng cách giữa các class section  */
+    padding: 60px 0;
+    display: block; /* Ghi đè display:flex của .container cha nếu cần */
 }
 
-.product-section h2 {
-    text-align: left;
-    text-decoration: underline;
-    font-size: 2em;
-    /*color: var(--dark-text);*/
-    color: #07805b;
-    margin-left: 20px;
+/* Vì .container ở trên đang dùng flex cho header, 
+   ta cần reset lại cho phần nội dung bên dưới */
+.product-section .container {
+    display: block; 
+}
+
+/* --- 1. Tiêu đề Section (Căn giữa, đẹp) --- */
+.section-header {
+    text-align: center;
     margin-top: 10px;
-    margin-bottom: 10px;
-    font-weight: 700;
+    margin-bottom: 50px;
 }
 
-/* (Các class .book-grid, .book-card... bạn giữ nguyên như cũ) */
-/* Đảm bảo chúng nằm trong file homepage.css này */
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--main-green);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-subtitle {
+    color: var(--text-gray);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+.title-underline {
+    width: 80px;
+    height: 4px;
+    background-color: var(--main-green);
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+/* --- 2. Lưới Sách (Book Grid) --- */
 .book-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;
     justify-content: center;
 }
+
+/* --- 3. Thẻ Sách (Book Card - Style Mẫu A) --- */
 .book-card {
-    border: 1px solid #ddd;
-    padding: 15px;
-    width: 220px; 
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #fff;
-}
-.book-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-}
-.book-card img {
-    width: 100%;
-    height: 300px; 
-    object-fit: cover;
-    border-radius: 5px;
-}
-.book-card h4 {
-    margin: 10px 0 5px 0;
-    height: 40px; 
+    background: #fff;
+    width: 260px;
+    border-radius: 10px;
     overflow: hidden;
-    font-size: 1.1em;
-    color: #222;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eee; /* Viền mờ thay vì đen đậm */
 }
-.book-card .author {
+
+.book-card:hover {
+    transform: translateY(-10px); /* Bay lên khi di chuột */
+    box-shadow: var(--hover-shadow);
+    border-color: var(--main-green);
+}
+
+/* Ảnh sách */
+.card-image {
+    height: 320px;
+    overflow: hidden;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.book-card:hover .card-image img {
+    transform: scale(1.05); /* Phóng to ảnh nhẹ khi hover */
+}
+
+/* Nội dung sách */
+.card-content {
+    padding: 15px;
+    text-align: left;
+}
+
+.card-content h4 {
+    margin: 0 0 5px;
+    height: 44px; /* Giới hạn 2 dòng tiêu đề */
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+.card-content h4 a {
+    text-decoration: none;
+    color: var(--text-dark); /* Dùng biến --text-dark */
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: color 0.2s;
+}
+
+.card-content h4 a:hover {
+    color: var(--main-green);
+}
+
+.author {
+    font-size: 0.9rem;
+    color: var(--text-gray);
     margin: 5px 0;
-    color: gray;
-    font-size: 0.9em;
 }
-.book-card .price {
-    margin: 10px 0;
-    color: #e44d26;
-    font-weight: bold;
-    font-size: 1.3em;
+
+.price {
+    font-size: 1.3rem;
+    color: var(--price-red);
+    font-weight: 700;
+    margin: 10px 0 0;
 }
-.book-card .btn-detail {
+
+/* Nút Chi tiết (Nằm dưới cùng card) */
+.card-action {
+    padding: 0 15px 20px;
+    margin-top: auto; 
+}
+
+.btn-detail {
     display: block;
     text-align: center;
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
     text-decoration: none;
+    padding: 10px;
+    border: 1px solid var(--main-green);
+    color: var(--main-green); /* Chữ xanh */
+    background-color: transparent; /* Nền trong suốt */
     border-radius: 5px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
+    font-weight: 600;
+    transition: all 0.3s;
 }
-.book-card .btn-detail:hover {
-    background-color: #0056b3;
+
+.btn-detail:hover {
+    background-color: var(--main-green); /* Hover thành nền xanh */
+    color: #fff; /* Chữ trắng */
+}
+
+/* --- 4. Nút "Xem Thêm" (Cuối trang) --- */
+.view-more-area {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-view-more {
+    display: inline-block;
+    padding: 15px 40px;
+    background-color: var(--dark-text); 
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 30px;
+    transition: background 0.3s ease, transform 0.2s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-view-more:hover {
+    background-color: var(--main-green);
+    transform: translateY(-2px);
 }

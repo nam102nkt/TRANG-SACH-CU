@@ -16,8 +16,8 @@ public class BookDAOImpl implements IBookDAO {
 	@Override
 	public List<Book> getFeaturedBooks() {
 		List<Book> books = new ArrayList<>();
-		// Dùng "TOP 10" của SQL Server để lấy 10 sách mới nhất
-		String sql = "SELECT TOP 10 * FROM books ORDER BY id DESC";
+		// Dùng "TOP 8" của SQL Server để lấy 10 sách mới nhất để hiển thị 2 hàng trên web
+		String sql = "SELECT TOP 8 * FROM books ORDER BY id DESC";
 
 		// Kết nối Java Core (Quy tắc 2):
 		// Đây là cách quản lý tài nguyên JDBC "sạch sẽ" (từ Java 7+)
