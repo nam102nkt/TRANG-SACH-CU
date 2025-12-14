@@ -23,17 +23,21 @@
                     <div class="profile-name"><c:out value="${sessionScope.user.fullName}" /></div>
                 </div>
                 <nav class="profile-menu">
+
                     <a href="profile?tab=info" class="${currentTab == 'info' ? 'active' : ''}">
                         Hồ sơ của tôi
                     </a>
+                    <a href="sell_book.jsp">Bán sách</a>
                     <a href="profile?tab=orders" class="${currentTab == 'orders' ? 'active' : ''}">
                         Quản lý đơn hàng
                     </a>
+                    <a href="wishlist.jsp">Danh sách yêu thích</a>
                     <a href="profile?tab=password" class="${currentTab == 'password' ? 'active' : ''}">
                         Đổi mật khẩu
                     </a>
                     <a href="logout" style="color: red;">Đăng xuất</a>
-                </nav>
+
+</nav>
             </aside>
 
             <section class="profile-content">
@@ -130,7 +134,17 @@
 
             </section>
         </div>
-    </main>
+    
+
+    <section class="profile-extra">
+        <h2>Bán sách</h2>
+        <jsp:include page="sell_book.jsp" />
+
+        <h2>Danh sách yêu thích</h2>
+        <jsp:include page="wishlist.jsp" />
+    </section>
+
+</main>
 
     <jsp:include page="footer.jsp" />
 

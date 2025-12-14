@@ -10,7 +10,7 @@ import model.User;
 import java.math.BigDecimal;
 
 /** Servlet xử lý đăng bán sách */
-@WebServlet("/sell")
+@WebServlet("/sell_book")
 @MultipartConfig(fileSizeThreshold=1024*1024*2, maxFileSize=1024*1024*10, maxRequestSize=1024*1024*50)
 public class SellBookServlet extends HttpServlet {
 
