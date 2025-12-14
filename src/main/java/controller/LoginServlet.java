@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Map;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,10 +9,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.CartItem;
 import model.User;
 
 import org.mindrot.jbcrypt.BCrypt; // <-- IMPORT BCrypt
 
+import dao.CartDAOImpl;
+import dao.ICartDAO;
 import dao.IUserDAO;
 import dao.UserDAOImpl;
 
@@ -19,10 +23,12 @@ import dao.UserDAOImpl;
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private IUserDAO userDAO;
+    private ICartDAO cartDAO;
 
     public LoginServlet() {
         super();
-        this.userDAO = new UserDAOImpl(); // Lại "tự đi chợ" (Quy tắc 3)
+        this.userDAO = new UserDAOImpl(); 
+        this.cartDAO = new CartDAOImpl();
     }
 
     /**
@@ -63,6 +69,17 @@ public class LoginServlet extends HttpServlet {
             // Nó hoạt động y hệt HashMap (Java Core - Quy tắc 2)
             // session.put("key", value)
             session.setAttribute("user", user); 
+            // hợp nhất giỏ hàng tạm nếu có sản phẩm
+            Map<Integer, CartItem> sessionCart = (Map<Integer, CartItem>)session.getAttribute("cart");
+            if(sessionCart !=null && !sessionCart.isEmpty()) {
+            	// gộp giỏ hàng tạm vào csdl 
+            	cartDAO.mergeCart(sessionCart, user.getId());
+            	// xóa giỏ hàng tạm sau khi gộp xong
+            	session.removeAttribute("cart");
+            }
+            // tải lại giỏ hàng của user lên
+            Map<Integer, CartItem> dbCart = cartDAO.getCartByUserId(user.getId());
+            session.setAttribute("cart", dbCart);
             
             // 3. (Optional) Cài đặt thời gian "sống" của session (ví dụ: 30 phút)
             session.setMaxInactiveInterval(30 * 60); // 30 phút * 60 giây

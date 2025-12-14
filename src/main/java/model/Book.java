@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.math.BigDecimal; // Import lớp này
 
-public class Book {
+public class Book implements Serializable{
 	private int id;
 	private String title;
 	private String author;

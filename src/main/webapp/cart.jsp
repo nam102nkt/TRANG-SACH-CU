@@ -1,11 +1,12 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Giỏ Hàng</title>
+<title>Giỏ hàng của bạn</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/homepage.css">
 <link rel="stylesheet" href="css/cart.css">
@@ -15,53 +16,58 @@
 	<jsp:include page="header.jsp"></jsp:include>
 
 	<main>
-		<div class="container">
-			<h1>Giỏ hàng</h1>
-			<c:choose>
-				<c:when
-					test="${empty sessionScope.cart or sessionScope.cart.size == 0}">
-					<p>Giỏ hàng trống.</p>
-				</c:when>
-				<c:otherwise>
-					<form action="cart" method="post">
-						<table class="cart-table">
+		<div class="cart-container">
+			<h2>Giỏ hàng của bạn</h2>
+
+			<c:if test="${empty sessionScope.cart}">
+				<p>Giỏ hàng của bạn đang trống.</p>
+				<a href="${pageContext.request.contextPath}/" class="btn-detail"
+					style="font-size: 25px"> MUA SẮM NGAY</a>
+			</c:if>
+
+			<c:if test="${not empty sessionScope.cart}">
+				<table class="cart-table">
+					<thead>
+						<tr>
+							<th colspan="2">Sản phẩm</th>
+							<th>Đơn giá</th>
+							<th>Số lượng</th>
+							<th>Thành tiền</th>
+							<th>Xóa</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<c:set var="grandTotal" value="0" />
+
+						<c:forEach items="${sessionScope.cart.values()}" var="item">
 							<tr>
-								<th>Ảnh</th>
-								<th>Tên</th>
-								<th>Giá</th>
-								<th>Số lượng</th>
-								<th>Tổng</th>
-								<th></th>
+								<td><img src="${item.book.imageUrl}"
+									alt="${item.book.title}" class="cart-item-image"></td>
+								<td>${item.book.title}</td>
+								<td>${item.book.price}VNĐ</td>
+								<td>${item.quantity}</td>
+								<td><b style="color: black;">${item.total} VNĐ</b></td>
+								<td><a href="remove_from_cart?bookId=${item.book.id}"
+									class="remove-item-link" style="color: red;">Xóa</a></td>
 							</tr>
-							<c:forEach var="item" items="${sessionScope.cart.items}">
-								<tr>
-									<td><img src="${item.book.imageUrl}" width="60" /></td>
-									<td>${item.book.title}</td>
-									<td><fmt:formatNumber value='${item.book.price}'
-											type='currency' currencySymbol='đ' /></td>
-									<td><input type="number" name="qty_${item.book.id}"
-										value="${item.quantity}" min="0" /></td>
-									<td><fmt:formatNumber value='${item.total}'
-											type='currency' currencySymbol='đ' /></td>
-									<td><a href="cart?action=remove&id=${item.book.id}"
-										class="btn-remove">Xóa</a></td>
-								</tr>
-							</c:forEach>
-						</table>
-						<div class="cart-total">
-							<h3>
-								Tổng:
-								<fmt:formatNumber value='${sessionScope.cart.total}'
-									type='currency' currencySymbol='đ' />
-							</h3>
-							<button type="submit" class="btn">Cập nhật</button>
-							<form action="checkout" method="post" style="display: inline">
-								<button type="submit" class="btn-buy">Thanh toán</button>
-							</form>
-						</div>
-					</form>
-				</c:otherwise>
-			</c:choose>
+
+							<c:set var="grandTotal" value="${grandTotal + item.total}" />
+
+
+						</c:forEach>
+					</tbody>
+				</table>
+
+				<div class="cart-total">
+					<b>Tổng cộng: ${grandTotal} VNĐ</b>
+				</div>
+				<div class="cart-actions">
+					<a href="${pageContext.request.contextPath}/" class="btn-detail">Tiếp tục mua sắm</a> 
+					<a href="${pageContext.request.contextPath}/checkout" class="btn-detail">Tiến hành Thanh toán</a>
+				</div>
+			</c:if>
+
 		</div>
 	</main>
 	<jsp:include page="footer.jsp"></jsp:include>
