@@ -9,12 +9,13 @@ public class DBContext {
 
     // --- CẤU HÌNH THÔNG TIN KẾT NỐI (GIỮ NGUYÊN CỦA BẠN) ---
     private static final String DB_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    private static final String DB_URL = "jdbc:sqlserver://localhost;" 
-    //private static final String DB_URL = "jdbc:sqlserver://localhost:1433;" 
-            + "instanceName=SQLJAVAWEB;" 
-            + "databaseName=OldBookStoreDB;" 
-            + "encrypt=true;"
-            + "trustServerCertificate=true;";
+    private static final String DB_URL =
+    	    "jdbc:sqlserver://localhost;"
+    	  + "instanceName=SQLJAVAWEB;"
+    	  + "databaseName=OldBookStoreDB;"
+    	  + "encrypt=true;"
+    	  + "trustServerCertificate=true;";
+
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "123"; 
 

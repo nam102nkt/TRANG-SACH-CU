@@ -1,44 +1,58 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Danh Sách Yêu Thích</title>
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/homepage.css">
+<title>Wishlist</title>
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/homepage.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/wishlist.css">
 </head>
-<body>
-<jsp:include page="header.jsp"></jsp:include>
-<div class="container">
-  <h1>Yêu thích</h1>
-  <c:choose>
-    <c:when test="${empty sessionScope.wl}">
-      <p>Chưa có sách yêu thích.</p>
-    </c:when>
-    <c:otherwise>
-      <div class="book-grid">
-        <c:forEach var="id" items="${sessionScope.wl}">
-          
-          <c:if test="${empty book}">
-            <!-- fallback: try to fetch via BookDAOImpl in servlet (recommended) -->
-            <div>Book id: ${id} - <a href="book?id=${id}">Xem</a> - <a href="wishlist?action=remove&id=${id}">Xóa</a></div>
-          </c:if>
-          <c:if test="${not empty book}">
-            <div class="book-card">
-              <img src="${book.imageUrl}" width="120"/>
-              <h3><a href="book?id=${book.id}">${book.title}</a></h3>
-              <p>${book.author}</p>
-              <p class="price"><fmt:formatNumber value='${book.price}' type='currency' currencySymbol='đ' /></p>
-              <a href="wishlist?action=remove&id=${book.id}" class="btn-remove">Xóa</a>
-            </div>
-          </c:if>
-        </c:forEach>
-      </div>
-    </c:otherwise>
-  </c:choose>
-</div>
-<jsp:include page="footer.jsp"></jsp:include>
+
+<body data-context="${pageContext.request.contextPath}">
+
+    <jsp:include page="header.jsp" />
+
+    <div class="wishlist-container">
+        <h1>Danh sách yêu thích</h1>
+
+        <c:if test="${empty books}">
+            <p>Bạn chưa thêm sách nào vào danh sách yêu thích.</p>
+        </c:if>
+
+        <div class="grid">
+            <c:forEach var="b" items="${books}">
+                <div class="card">
+
+                    <!-- CHUYỂN ĐẾN TRANG CHI TIẾT SẢN PHẨM -->
+                  <a href="${pageContext.request.contextPath}/product-detail?id=${b.id}">
+
+                        <img src="${b.imageUrl}" class="thumb">
+                    </a>
+
+                    <h3>${b.title}</h3>
+                    <p class="author">${b.author}</p>
+
+                    <p class="price">
+                        <fmt:formatNumber value="${b.price}" type="number" /> đ
+                    </p>
+
+                    <button class="btn-remove" data-id="${b.id}">
+                        Xóa khỏi yêu thích
+                    </button>
+
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <!-- IMPORT JS RIÊNG -->
+    <script src="${pageContext.request.contextPath}/js/wishlist.js?v=1"></script>
+
+    <jsp:include page="footer.jsp" />
 </body>
 </html>

@@ -5,61 +5,67 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import model.Book;
+import model.User;
+import dao.BookDAOImpl;
+import dao.IBookDAO;
+import dao.WishlistDAO;
 
 import java.io.IOException;
 
-import dao.BookDAOImpl;
-import dao.IBookDAO;
-
-/**
- * Servlet implementation class ProductDetailServlet
- */
 @WebServlet("/product-detail")
 public class ProductDetailServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private IBookDAO bookDAO;   
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-	public ProductDetailServlet() {
-		this.bookDAO = new BookDAOImpl();
-	}
+    private static final long serialVersionUID = 1L;
+    private IBookDAO bookDAO;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		try {
-			// đọc id từ ỦL (vd: ?id=5)
-			int id = Integer.parseInt(request.getParameter("id"));
-			// gọi DAO để lấy book
-			Book book = bookDAO.findBookId(id);
-			if (book != null) {
-				// 'đóng gói' sách vào request
-				request.setAttribute("book", book);
-				// chuyển tiếp sang trang (view) detail.jsp
-				request.getRequestDispatcher("product_detail.jsp").forward(request, response);
-			} else {
-				// không tìm thấy sách
-				response.sendRedirect("index.jsp");// tạm quay lại trang chủ
-			}
-		} catch (NumberFormatException e) {
-			// nếu id không phải là số
-			response.sendRedirect("index.jsp");
-		}
-	}
+    public ProductDetailServlet() {
+        this.bookDAO = new BookDAOImpl();
+    }
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            Book book = bookDAO.findBookId(id);
+
+            if (book == null) {
+                response.sendRedirect("index.jsp");
+                return;
+            }
+
+            request.setAttribute("book", book);
+
+            // === KIỂM TRA TRONG WISHLIST ===
+            HttpSession session = request.getSession();
+            User u = (User) session.getAttribute("user");
+            Integer userId = null;
+
+            if (u != null) {
+                userId = u.getId();
+            }
+
+            boolean isInWishlist = false;
+
+            if (userId != null) {
+                WishlistDAO wdao = new WishlistDAO();
+                try {
+                    isInWishlist = wdao.exists(userId, id);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            request.setAttribute("isInWishlist", isInWishlist);
+
+
+            request.getRequestDispatcher("product_detail.jsp").forward(request, response);
+
+        } catch (NumberFormatException e) {
+            response.sendRedirect("index.jsp");
+        }
+    }
 }

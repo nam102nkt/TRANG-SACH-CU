@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
-:root { 
-	--main-green: #07805b;
+:root { -
+	-main-green: #07805b;
 }
 
 .search-result-container {

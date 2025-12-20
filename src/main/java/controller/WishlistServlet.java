@@ -1,45 +1,134 @@
 package controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * WishlistServlet manages user's wishlist stored in session.
- * Actions:
- *  - add?id=... : add book id to wishlist
- *  - remove?id=... : remove book id
- *  - view : forward to wishlist.jsp
- */
-@WebServlet("/wishlist")
-public class WishlistServlet extends jakarta.servlet.http.HttpServlet {
+import com.google.gson.JsonObject;
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+import dao.BookDAOImpl;
+import dao.IBookDAO;
+import dao.WishlistDAO;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Book;
+
+@WebServlet("/wishlist")
+public class WishlistServlet extends HttpServlet {
+
+    private WishlistDAO dao = new WishlistDAO();
+    private IBookDAO bookDAO = new BookDAOImpl();
+
+
+    // ===============================
+    // HIỂN THỊ TRANG WISHLIST (GET)
+    // ===============================
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, ServletException {
+
         HttpSession session = req.getSession();
-        List<Integer> wl = (List<Integer>) session.getAttribute("wl");
-        if (wl == null) { wl = new ArrayList<>(); session.setAttribute("wl", wl); }
+        Object u = session.getAttribute("user");
+
+        if (u == null) {
+            resp.sendRedirect("login.jsp");
+            return;
+        }
+
+        int userId = ((model.User) u).getId();
+
+        // Lấy book_id trong wishlist
+        List<Integer> ids = null;
+
+    
+            try {
+				ids = dao.getAll(userId);
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            // Optional: chuyển sang trang lỗi hoặc báo lỗi
+        
+        // Lấy thông tin sách
+        List<Book> books = bookDAO.getBooksByIds(ids);
+        
+
+        // Gửi sang JSP
+        req.setAttribute("books", books);
+
+        req.getRequestDispatcher("wishlist.jsp").forward(req, resp);
+    }
+
+    // ===============================
+    // XỬ LÝ AJAX TOGGLE (POST)
+    // ===============================
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        resp.setContentType("application/json; charset=UTF-8");
+
+        HttpSession session = req.getSession();
+        Object u = session.getAttribute("user");
+        JsonObject json = new JsonObject();
+
+        if (u == null) {
+            json.addProperty("success", false);
+            json.addProperty("message", "Bạn cần đăng nhập để sử dụng wishlist.");
+            resp.getWriter().write(json.toString());
+            return;
+        }
+
+        int userId = ((model.User) u).getId();
 
         String action = req.getParameter("action");
-        if ("add".equals(action)) {
-            try {
-                int id = Integer.parseInt(req.getParameter("id"));
-                if (!wl.contains(id)) wl.add(id);
-            } catch (Exception e) {}
-            resp.sendRedirect("wishlist.jsp");
+        String bookIdParam = req.getParameter("bookId");
+
+        if (bookIdParam == null || bookIdParam.isEmpty()) {
+            json.addProperty("success", false);
+            json.addProperty("message", "Thiếu tham số book id.");
+            resp.getWriter().write(json.toString());
             return;
-        } else if ("remove".equals(action)) {
-            try {
-                int id = Integer.parseInt(req.getParameter("id"));
-                wl.remove(Integer.valueOf(id));
-            } catch (Exception e) {}
-            resp.sendRedirect("wishlist.jsp");
+        }
+
+        int bookId;
+        try {
+            bookId = Integer.parseInt(bookIdParam);
+        } catch (NumberFormatException e) {
+            json.addProperty("success", false);
+            json.addProperty("message", "Book ID không hợp lệ.");
+            resp.getWriter().write(json.toString());
             return;
-        } else {
-            req.getRequestDispatcher("wishlist.jsp").forward(req, resp);
-            return;
+        }
+
+        try {
+            if ("toggle".equals(action)) {
+                boolean exists = dao.exists(userId, bookId);
+
+                if (exists) {
+                    dao.remove(userId, bookId);
+                    json.addProperty("status", "removed");
+                    json.addProperty("message", "Đã xóa khỏi danh sách yêu thích");
+                } else {
+                    dao.add(userId, bookId);
+                    json.addProperty("status", "added");
+                    json.addProperty("message", "Đã thêm vào danh sách yêu thích");
+                }
+
+                json.addProperty("success", true);
+            } else {
+                json.addProperty("success", false);
+                json.addProperty("message", "Action không hợp lệ!");
+            }
+
+            resp.getWriter().write(json.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.addProperty("success", false);
+            json.addProperty("message", "Lỗi server!");
+            resp.getWriter().write(json.toString());
         }
     }
 }

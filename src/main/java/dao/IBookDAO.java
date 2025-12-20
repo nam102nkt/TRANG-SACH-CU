@@ -15,5 +15,5 @@ public interface IBookDAO {
     java.util.List<model.Book> filter(java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice, String condition);
     // Thêm sách mới, trả về id vừa tạo
     int insertBook(model.Book b);
-
+    List<Book> getBooksByIds(List<Integer> ids);
 }

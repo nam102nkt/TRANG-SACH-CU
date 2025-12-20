@@ -71,8 +71,9 @@
 				</div>
 				<div class="section-header" style="text-align: left;">
 					<h2 class="section-title">TÁC GIẢ NỔI BẬC</h2>
-					<p class="section-subtitle">Tuyển tập những cuốn sách của các ngồi bút tài ba!</p>
-					
+					<p class="section-subtitle">Tuyển tập những cuốn sách của các
+						ngồi bút tài ba!</p>
+
 				</div>
 			</div>
 

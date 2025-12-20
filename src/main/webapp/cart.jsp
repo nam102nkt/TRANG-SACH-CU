@@ -63,8 +63,9 @@
 					<b>Tổng cộng: ${grandTotal} VNĐ</b>
 				</div>
 				<div class="cart-actions">
-					<a href="${pageContext.request.contextPath}/" class="btn-detail">Tiếp tục mua sắm</a> 
-					<a href="${pageContext.request.contextPath}/checkout" class="btn-detail">Tiến hành Thanh toán</a>
+					<a href="${pageContext.request.contextPath}/" class="btn-detail">Tiếp
+						tục mua sắm</a> <a href="${pageContext.request.contextPath}/checkout"
+						class="btn-detail">Tiến hành Thanh toán</a>
 				</div>
 			</c:if>
 
