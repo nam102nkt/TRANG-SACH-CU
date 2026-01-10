@@ -1,39 +1,75 @@
 package model;
+
 import java.math.BigDecimal;
-import java.sql.Timestamp; // Dùng Timestamp cho ngày giờ đầy đủ
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 public class Order {
     private int id;
     private int userId;
-    private BigDecimal totalPrice; // Đổi từ double sang BigDecimal
+    private BigDecimal totalPrice;
     private String status;
-    private Timestamp orderDate;   // Thêm ngày đặt hàng
-    private List<OrderDetail> details = new ArrayList<>();
+    private Date orderDate;
+    private String shippingAddress;
 
-    public Order() {}
+    // constructor
+	public Order(int id, int userId, BigDecimal totalPrice, String status, Date orderDate, String shippingAddress) {
+		super();
+		this.id = id;
+		this.userId = userId;
+		this.totalPrice = totalPrice;
+		this.status = status;
+		this.orderDate = orderDate;
+		this.shippingAddress = shippingAddress;
+	}
 
-    // Getters Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+	public int getId() {
+		return id;
+	}
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public BigDecimal getTotalPrice() { return totalPrice; }
-    public void setTotalPrice(BigDecimal totalPrice) { this.totalPrice = totalPrice; }
+	public int getUserId() {
+		return userId;
+	}
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    
-    public Timestamp getOrderDate() { return orderDate; }
-    public void setOrderDate(Timestamp orderDate) { this.orderDate = orderDate; }
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
-    public List<OrderDetail> getDetails() { return details; }
-    public void setDetails(List<OrderDetail> details) { this.details = details; }
+	public BigDecimal getTotalPrice() {
+		return totalPrice;
+	}
 
-    public void addDetail(OrderDetail d) {
-        this.details.add(d);
-    }
+	public void setTotalPrice(BigDecimal totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public String getShippingAddress() {
+		return shippingAddress;
+	}
+
+	public void setShippingAddress(String shippingAddress) {
+		this.shippingAddress = shippingAddress;
+	}
+
+    // getter & setter
+	
 }

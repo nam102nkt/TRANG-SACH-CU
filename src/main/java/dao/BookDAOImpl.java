@@ -1,11 +1,15 @@
 package dao;
 
-import model.Book;
-import database.DBContext;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import database.DBContext;
+import model.Book;
 
 public class BookDAOImpl implements IBookDAO {
 
@@ -211,4 +215,47 @@ public class BookDAOImpl implements IBookDAO {
 
         return list;
     }
+    @Override
+    public List<Book> searchSuggest(String keyword) {
+        List<Book> list = new ArrayList<>();
+
+        String sql = """
+            SELECT TOP 10 *
+            FROM books
+            WHERE title LIKE ?
+            ORDER BY
+              CASE
+                WHEN title LIKE ? THEN 0
+                ELSE 1
+              END,
+              title
+        """;
+
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "%" + keyword + "%"); // chứa
+            ps.setString(2, keyword + "%");       // bắt đầu
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Book b = new Book();
+                    b.setId(rs.getInt("id"));
+                    b.setTitle(rs.getString("title"));
+                    b.setAuthor(rs.getString("author"));
+                    b.setPrice(rs.getBigDecimal("price"));
+                    b.setImageUrl(rs.getString("image_url"));
+                    b.setDescription(rs.getString("description"));
+                    b.setStatus(rs.getString("status"));
+                    b.setSellerId(rs.getInt("seller_id"));
+                    list.add(b);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
 }

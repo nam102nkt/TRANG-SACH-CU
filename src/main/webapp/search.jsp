@@ -6,35 +6,49 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Kết Quả Tìm Kiếm</title>
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/homepage.css">
+<title>Kết quả tìm kiếm</title>
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/homepage.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/search-result.css">
 </head>
-<body>
-	<jsp:include page="header.jsp"></jsp:include>
-	<header> </header>
 
+<body data-context="${pageContext.request.contextPath}">
 
+	<jsp:include page="header.jsp" />
 
+	<div class="container search-page">
 
-	<div class="container">
-		<h2>Kết quả tìm kiếm cho: ${q}</h2>
-		<c:if test="${empty books}">
-			<p>Không tìm thấy kết quả.</p>
-		</c:if>
-		<div class="book-grid">
-			<c:forEach var="b" items="${books}">
-				<div class="book-card">
-					<img src="${b.imageUrl}" alt="${b.title}" />
-					<h4>
-						<a href="book?id=${b.id}">${b.title}</a>
-					</h4>
-					<p class="author">${b.author}</p>
-					<p class="price">${b.price}đ</p>
-				</div>
-			</c:forEach>
+		<!-- TIÊU ĐỀ -->
+		<div class="search-title">
+			Kết quả tìm kiếm cho: <span>"${q}"</span>
 		</div>
+
+		<c:if test="${not empty books}">
+			<div class="book-grid">
+				<c:forEach var="b" items="${books}">
+					<div class="book-card" data-id="${b.id}">
+
+						<img src="${b.imageUrl}" alt="${b.title}">
+
+						<div class="info">
+							<h4>${b.title}</h4>
+							<div class="author">${b.author}</div>
+							<div class="price">${b.price}đ</div>
+						</div>
+
+					</div>
+				</c:forEach>
+			</div>
+		</c:if>
+
 	</div>
-	<jsp:include page="footer.jsp"></jsp:include>
+
+	<jsp:include page="footer.jsp" />
+	<script src="${pageContext.request.contextPath}/js/search-result.js"></script>
+
 </body>
 </html>

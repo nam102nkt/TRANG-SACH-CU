@@ -40,7 +40,7 @@
 
 						<c:set var="grandTotal" value="0" />
 
-						<c:forEach items="${sessionScope.cart.values()}" var="item">
+						<c:forEach items="${sessionScope.cart.items}" var="item">
 							<tr>
 								<td><img src="${item.book.imageUrl}"
 									alt="${item.book.title}" class="cart-item-image"></td>
