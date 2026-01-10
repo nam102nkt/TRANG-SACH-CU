@@ -1,58 +1,100 @@
 package model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
-/**
- * Cart stored in session keeps mapping bookId -> CartItem.
- * Methods:
- *  - add(Book, qty): add quantity (if exists, increase)
- *  - update(bookId, qty): set quantity (<=0 removes)
- *  - remove(bookId): remove item
- *  - getItems(): return collection of CartItem
- *  - getTotal(): BigDecimal sum of item totals
- *  - clear(): empty cart
- */
-public class Cart implements Serializable{
-    private Map<Integer, CartItem> items = new LinkedHashMap<>();
+public class Cart {
+	private int cartId;
+	private int userId;
 
-    public Cart(){}
+	private Map<Integer, CartItem> items = new LinkedHashMap<>();
 
-    public void add(Book b, int qty) {
-        if (b == null || qty <= 0) return;
-        CartItem existing = items.get(b.getId());
-        if (existing == null) {
-            items.put(b.getId(), new CartItem(b, qty));
-        } else {
-            existing.setQuantity(existing.getQuantity() + qty);
+	public Map<Integer, CartItem> getItems() {
+		return items;
+	}
+
+	public int getCartId() {
+		return cartId;
+	}
+
+	public void setCartId(int cartId) {
+		this.cartId = cartId;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public void setItems(Map<Integer, CartItem> items) {
+		this.items = items;
+	}
+
+	public Collection<CartItem> values() {
+		return items.values();
+	}
+
+	/*
+	 * ========================= ADD / REMOVE / UPDATE =========================
+	 */
+
+	public void add(Book book, int qty) {
+		CartItem item = items.get(book.getId());
+		if (item == null) {
+			items.put(book.getId(), new CartItem(book, qty));
+		} else {
+			item.setQuantity(item.getQuantity() + qty);
+		}
+	}
+
+	public void remove(int bookId) {
+		items.remove(bookId);
+	}
+	
+    public void increment(int bookId) {
+        CartItem i = items.get(bookId);
+        if (i != null) {
+            i.setQuantity(i.getQuantity() + 1);
         }
     }
 
-    public void update(int bookId, int qty) {
-        if (qty <= 0) {
-            items.remove(bookId);
-        } else {
-            CartItem ci = items.get(bookId);
-            if (ci != null) ci.setQuantity(qty);
+    public void decrement(int bookId) {
+        CartItem i = items.get(bookId);
+        if (i != null && i.getQuantity() > 1) {
+            i.setQuantity(i.getQuantity() - 1);
         }
     }
 
-    public void remove(int bookId){ items.remove(bookId); }
+	public void update(int bookId, int qty) {
+		if (qty <= 0) {
+			items.remove(bookId);
+		} else {
+			CartItem item = items.get(bookId);
+			if (item != null)
+				item.setQuantity(qty);
+		}
+	}
 
-    public Collection<CartItem> getItems(){ return items.values(); }
+	public int getSize() {
+		int total = 0;
+		for (CartItem item : items.values()) {
+			total += item.getQuantity();
+		}
+		return total;
+	}
 
-    public BigDecimal getTotal(){
-        BigDecimal total = BigDecimal.ZERO;
-        for (CartItem ci : items.values()){
-            total = total.add(ci.getTotal());
-        }
-        return total;
-    }
+	public BigDecimal getTotalPrice() {
+		BigDecimal total = BigDecimal.ZERO;
+		for (CartItem item : items.values()) {
+			total = total.add(item.getTotal());
+		}
+		return total;
+	}
 
-    public int getSize(){ return items.size(); }
-
-    public void clear(){ items.clear(); }
+	public boolean isEmpty() {
+		return items.isEmpty();
+	}
 }

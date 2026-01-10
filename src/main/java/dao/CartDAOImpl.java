@@ -1,6 +1,7 @@
 package dao;
 
 import model.Book;
+import model.Cart;
 import model.CartItem;
 
 import java.sql.Connection;
@@ -9,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
-import database.DBContext;
 
 public class CartDAOImpl implements ICartDAO {
 
@@ -89,21 +88,20 @@ public class CartDAOImpl implements ICartDAO {
 	 */
 	@Override
 	public void addItemToCart(int userId, int bookId, int quantity) {
-
+		// Tách các câu lệnh SQL ra làm hằng số hoặc biến rõ ràng để dễ quản lý
 		String checkSql = "SELECT quantity FROM cart_items WHERE cart_id = ? AND book_id = ?";
-
-		String updateSql = "UPDATE cart_items SET quantity = quantity + ? " + "WHERE cart_id = ? AND book_id = ?";
-
+		String updateSql = "UPDATE cart_items SET quantity = quantity + ? WHERE cart_id = ? AND book_id = ?";
 		String insertSql = "INSERT INTO cart_items (cart_id, book_id, quantity) VALUES (?, ?, ?)";
 
-		try (Connection conn = DBContext.getConnection()) {
-
-			conn.setAutoCommit(false);
+		Connection conn = null; // Khai báo ngoài để có thể rollback trong khối catch
+		try {
+			conn = DBContext.getConnection();
+			conn.setAutoCommit(false); // Bắt đầu một Transaction (Giao dịch)
 
 			int cartId = findOrCreateCart(conn, userId);
 			int currentQuantity = 0;
 
-			// Kiểm tra đã tồn tại sách trong giỏ chưa
+			// 1. Kiểm tra tồn tại (Read)
 			try (PreparedStatement ps = conn.prepareStatement(checkSql)) {
 				ps.setInt(1, cartId);
 				ps.setInt(2, bookId);
@@ -114,8 +112,8 @@ public class CartDAOImpl implements ICartDAO {
 				}
 			}
 
+			// 2. Xử lý Logic Update hoặc Insert (Write)
 			if (currentQuantity > 0) {
-				// UPDATE
 				try (PreparedStatement ps = conn.prepareStatement(updateSql)) {
 					ps.setInt(1, quantity);
 					ps.setInt(2, cartId);
@@ -123,7 +121,6 @@ public class CartDAOImpl implements ICartDAO {
 					ps.executeUpdate();
 				}
 			} else {
-				// INSERT
 				try (PreparedStatement ps = conn.prepareStatement(insertSql)) {
 					ps.setInt(1, cartId);
 					ps.setInt(2, bookId);
@@ -132,10 +129,28 @@ public class CartDAOImpl implements ICartDAO {
 				}
 			}
 
-			conn.commit();
+			conn.commit(); // Hoàn tất thành công - Lưu mọi thay đổi
 
 		} catch (SQLException e) {
+			if (conn != null) {
+				try {
+					System.err.println("Transaction is being rolled back...");
+					conn.rollback(); // Hoàn tác - Trả dữ liệu về trạng thái trước khi lỗi
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
 			e.printStackTrace();
+		} finally {
+			// Luôn đảm bảo đóng kết nối để tránh Resource Leak (Rò rỉ tài nguyên)
+			if (conn != null) {
+				try {
+					conn.setAutoCommit(true); // Trả lại trạng thái mặc định cho Connection Pool
+					conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
@@ -158,7 +173,8 @@ public class CartDAOImpl implements ICartDAO {
 	@Override
 	public void removeItemFromCart(int userId, int bookId) {
 
-		String sql = "DELETE ci " + "FROM cart_items ci " + "JOIN carts c ON ci.cart_id = c.cart_id "
+		String sql = "DELETE ci " 
+		+ "FROM cart_items ci " + "JOIN carts c ON ci.cart_id = c.cart_id "
 				+ "WHERE c.user_id = ? AND ci.book_id = ?";
 
 		try (Connection conn = DBContext.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -168,6 +184,114 @@ public class CartDAOImpl implements ICartDAO {
 			ps.executeUpdate();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void updateItemQuantity(int userId, int bookId, int qty) {
+		String sql =
+				"UPDATE cart_items SET quantity=? " +
+				"WHERE cart_id = (SELECT cart_id FROM carts WHERE user_id = ?) AND book_id=?";
+
+		try (Connection con = DBContext.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setInt(1, qty);
+			ps.setInt(2, userId);
+			ps.setInt(3, bookId);
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Cart getCart(int userId) {
+		String sql = "SELECT c.cart_id, ci.book_id, ci.quantity, b.title, b.price "
+		           + "FROM carts c "
+		           + "JOIN cart_items ci ON c.cart_id = ci.cart_id "
+		           + "JOIN books b ON ci.book_id = b.id "
+		           + "WHERE c.user_id = ?";
+
+
+		Cart cart = new Cart();
+		cart.setUserId(userId);
+
+		try (Connection con = DBContext.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+			ps.setInt(1, userId);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Book b = new Book();
+				b.setId(rs.getInt("book_id"));
+				b.setTitle(rs.getString("title"));
+				b.setPrice(rs.getBigDecimal("price"));
+
+				CartItem item = new CartItem(b, rs.getInt("quantity"));
+				cart.getItems().put(b.getId(), item);
+				cart.setCartId(rs.getInt("cart_id"));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return cart;
+	}
+
+	@Override
+	public void clear(int userId) {
+		String sql =
+				"DELETE ci FROM cart_items ci " +
+				"JOIN carts c ON ci.cart_id = c.cart_id " +
+				"WHERE c.user_id = ?";
+
+		try (Connection con = DBContext.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+			ps.setInt(1, userId);
+			ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void changeQuantity(int userId, int bookId, int delta) {
+	    String sql =
+	        "UPDATE cart_items " +
+	        "SET quantity = quantity + ? " +
+	        "WHERE cart_id = (SELECT cart_id FROM carts WHERE user_id = ?) " +
+	        "AND book_id = ? " +
+	        "AND quantity + ? >= 1";
+
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql)) {
+
+	        ps.setInt(1, delta);
+	        ps.setInt(2, userId);
+	        ps.setInt(3, bookId);
+	        ps.setInt(4, delta);
+	        ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	@Override
+	public void setQuantity(int userId, int bookId, int qty) {
+		String sql =
+				"UPDATE cart_items SET quantity=? " +
+				"WHERE cart_id = (SELECT cart_id FROM carts WHERE user_id = ?) AND book_id=?";
+
+
+		try (Connection c = DBContext.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+
+			ps.setInt(1, qty);
+			ps.setInt(2, userId);
+			ps.setInt(3, bookId);
+			ps.executeUpdate();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

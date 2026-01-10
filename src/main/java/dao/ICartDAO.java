@@ -2,6 +2,7 @@ package dao;
 
 import java.util.Map;
 
+import model.Cart;
 import model.CartItem;
 
 public interface ICartDAO {
@@ -26,4 +27,11 @@ public interface ICartDAO {
 	 * Xóa một món hàng khỏi giỏ hàng CSDL.
 	 */
 	public void removeItemFromCart(int userId, int bookId);
+	
+	public void updateItemQuantity(int userId, int bookId, int qty);
+	
+	public Cart getCart(int userId);
+	public void clear(int userId);
+	public void changeQuantity(int userId, int bookId, int delta);
+    public void setQuantity(int userId, int bookId, int qty);
 }

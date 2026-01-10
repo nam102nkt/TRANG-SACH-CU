@@ -75,7 +75,4 @@ public class User implements Serializable{
 	public static long getSeriaversionuid() {
 		return seriaVersionUID;
 	}
-	
-	
-	
 }

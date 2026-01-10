@@ -1,141 +1,124 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import database.DBContext;
 import model.Book;
+import java.sql.*;
+import java.util.*;
+import java.math.BigDecimal;
 
 public class BookDAOImpl implements IBookDAO {
+    private static final String INSERT_PENDING =
+            "INSERT INTO books(title, author, price, description, image_url, [condition], status, seller_id, category_id) " +
+            "VALUES (?, ?, ?, ?, ?, ?, 'PENDING', ?, ?)";
+
+        private static final String FIND_PENDING =
+            "SELECT b.*, u.fullname FROM books b JOIN users u ON b.seller_id = u.id WHERE b.status = 'PENDING'";
+
+        private static final String UPDATE_STATUS =
+            "UPDATE books SET status = ? WHERE id = ?";
+
+        private static final String FIND_APPROVED =
+            "SELECT * FROM books WHERE status = 'APPROVED'";
+
+    private Book map(ResultSet rs) throws SQLException {
+        Book b = new Book();
+        b.setId(rs.getInt("id"));
+        b.setTitle(rs.getString("title"));
+        b.setAuthor(rs.getString("author"));
+        b.setPrice(rs.getBigDecimal("price"));
+        b.setDescription(rs.getString("description"));
+        b.setImageUrl(rs.getString("image_url"));
+        b.setStatus(rs.getString("status"));
+        b.setSellerId(rs.getInt("seller_id"));
+        b.setCondition(rs.getString("condition"));
+        b.setCategoryId(rs.getInt("category_id"));
+
+        Timestamp ts = rs.getTimestamp("created_at");
+        if (ts != null) b.setCreatedAt(ts.toLocalDateTime());
+
+        return b;
+    }
 
     @Override
     public List<Book> getFeaturedBooks() {
-        List<Book> books = new ArrayList<>();
-        String sql = "SELECT TOP 8 * FROM books ORDER BY id DESC";
+        String sql = "SELECT TOP 8 * FROM books WHERE status='ACTIVE' ORDER BY created_at DESC";
+        List<Book> list = new ArrayList<>();
 
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
+        try (Connection c = DBContext.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            while (rs.next()) {
-                Book book = new Book();
-                book.setId(rs.getInt("id"));
-                book.setTitle(rs.getString("title"));
-                book.setAuthor(rs.getString("author"));
-                book.setPrice(rs.getBigDecimal("price"));
-                book.setImageUrl(rs.getString("image_url"));  // FIX
-                book.setStatus(rs.getString("status"));
-                books.add(book);
-            }
-        } catch (SQLException e) {
+            while (rs.next()) list.add(map(rs));
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return books;
+        return list;
     }
-
 
     @Override
     public Book findBookId(int id) {
-        Book book = null;
         String sql = "SELECT * FROM books WHERE id = ?";
-
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection c = DBContext.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return map(rs);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    book = new Book();
-                    book.setId(rs.getInt("id"));
-                    book.setTitle(rs.getString("title"));
-                    book.setAuthor(rs.getString("author"));
-                    book.setPrice(rs.getBigDecimal("price"));
-                    book.setImageUrl(rs.getString("image_url"));  // FIX
-                    book.setDescription(rs.getString("description"));
-                    book.setStatus(rs.getString("status"));
-                    book.setSellerId(rs.getInt("seller_id"));
-                }
-            }
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return book;
+        return null;
     }
-
 
     @Override
     public List<Book> search(String keyword) {
-        List<Book> list = new ArrayList<>();
         String sql = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
+        List<Book> list = new ArrayList<>();
 
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection c = DBContext.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
             String k = "%" + keyword + "%";
             ps.setString(1, k);
             ps.setString(2, k);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Book b = new Book();
-                    b.setId(rs.getInt("id"));
-                    b.setTitle(rs.getString("title"));
-                    b.setAuthor(rs.getString("author"));
-                    b.setPrice(rs.getBigDecimal("price"));
-                    b.setImageUrl(rs.getString("image_url"));  // FIX
-                    b.setDescription(rs.getString("description"));
-                    b.setStatus(rs.getString("status"));
-                    b.setSellerId(rs.getInt("seller_id"));
-                    list.add(b);
-                }
-            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(map(rs));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
-
-
+    
     @Override
-    public List<Book> filter(java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice, String condition) {
+    public List<Book> filter(BigDecimal min, BigDecimal max, Integer categoryId, String sort, String condition) {
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM books WHERE status = 'ACTIVE'");
+
+        if (min != null) sql.append(" AND price >= ?");
+        if (max != null) sql.append(" AND price <= ?");
+        if (categoryId != null) sql.append(" AND category_id = ?");
+        if (condition != null && !condition.isBlank()) sql.append(" AND book_condition = ?");
+
+        if ("asc".equalsIgnoreCase(sort)) sql.append(" ORDER BY price ASC");
+        else if ("desc".equalsIgnoreCase(sort)) sql.append(" ORDER BY price DESC");
+        else sql.append(" ORDER BY created_at DESC");
+
         List<Book> list = new ArrayList<>();
-        StringBuilder sb = new StringBuilder("SELECT * FROM books WHERE 1=1");
 
-        if (minPrice != null) sb.append(" AND price >= ?");
-        if (maxPrice != null) sb.append(" AND price <= ?");
-        if (condition != null && !condition.isEmpty()) sb.append(" AND condition = ?");
+        try (Connection c = DBContext.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql.toString())) {
 
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sb.toString())) {
+            int i = 1;
+            if (min != null) ps.setBigDecimal(i++, min);
+            if (max != null) ps.setBigDecimal(i++, max);
+            if (categoryId != null) ps.setInt(i++, categoryId);
+            if (condition != null && !condition.isBlank()) ps.setString(i++, condition.toUpperCase());
 
-            int idx = 1;
-            if (minPrice != null) ps.setBigDecimal(idx++, minPrice);
-            if (maxPrice != null) ps.setBigDecimal(idx++, maxPrice);
-            if (condition != null && !condition.isEmpty()) ps.setString(idx++, condition);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Book b = new Book();
-                    b.setId(rs.getInt("id"));
-                    b.setTitle(rs.getString("title"));
-                    b.setAuthor(rs.getString("author"));
-                    b.setPrice(rs.getBigDecimal("price"));
-                    b.setImageUrl(rs.getString("image_url"));  // FIX
-                    b.setDescription(rs.getString("description"));
-                    b.setStatus(rs.getString("status"));
-                    b.setSellerId(rs.getInt("seller_id"));
-                    list.add(b);
-                }
-            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(map(rs));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,118 +127,165 @@ public class BookDAOImpl implements IBookDAO {
         return list;
     }
 
-
-    @Override
-    public int insertBook(Book b) {
-        // FIX: thiếu dấu hỏi cho seller_id → giờ đã đủ 8 dấu ?
-        String sql = "INSERT INTO books(title, author, price, description, image_url, condition, status, seller_id) "
-                   + "VALUES(?,?,?,?,?,?,?,?)";
-
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, b.getTitle());
-            ps.setString(2, b.getAuthor());
-            ps.setBigDecimal(3, b.getPrice());
-            ps.setString(4, b.getDescription());
-            ps.setString(5, b.getImageUrl());
-            ps.setString(6, "Used");
-            ps.setString(7, "PENDING");
-            ps.setInt(8, b.getSellerId());
-
-            ps.executeUpdate();
-
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) return rs.getInt(1);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
+//    @Override
+//    public int insertBook(Book b) {
+//        String sql = "INSERT INTO books(title,author,price,description,image_url,status,"
+//        		+ "seller_id,condition,category_id,created_at)"
+//        		+ "VALUES(?,?,?,?,?,'PENDING',?,?,?,GETDATE())";
+//
+//        try (Connection c = DBContext.getConnection();
+//             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+//
+//            ps.setString(1, b.getTitle());
+//            ps.setString(2, b.getAuthor());
+//            ps.setBigDecimal(3, b.getPrice());
+//            ps.setString(4, b.getDescription());
+//            ps.setString(5, b.getImageUrl());
+//            ps.setInt(6, b.getSellerId());
+//            ps.setString(7, b.getCondition());
+//            ps.setInt(8, b.getCategoryId());
+//
+//            ps.executeUpdate();
+//            ResultSet rs = ps.getGeneratedKeys();
+//            if (rs.next()) return rs.getInt(1);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return -1;
+//    }
 
     @Override
     public List<Book> getBooksByIds(List<Integer> ids) {
-        List<Book> list = new ArrayList<>();
-        if (ids == null || ids.isEmpty()) return list;
+        if (ids == null || ids.isEmpty()) return Collections.emptyList();
 
-        String placeholders = String.join(",", java.util.Collections.nCopies(ids.size(), "?"));
+        String placeholders = String.join(",", Collections.nCopies(ids.size(), "?"));
         String sql = "SELECT * FROM books WHERE id IN (" + placeholders + ")";
 
-        try (Connection con = DBContext.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+        List<Book> list = new ArrayList<>();
 
-            for (int i = 0; i < ids.size(); i++) {
-                ps.setInt(i + 1, ids.get(i));
-            }
+        try (Connection c = DBContext.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            for (int i = 0; i < ids.size(); i++) ps.setInt(i + 1, ids.get(i));
 
             ResultSet rs = ps.executeQuery();
+            while (rs.next()) list.add(map(rs));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    @Override
+    public void insertPending(Book book) {
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(INSERT_PENDING)) {
+
+            ps.setString(1, book.getTitle());
+            ps.setString(2, book.getAuthor());
+            ps.setBigDecimal(3, book.getPrice());
+            ps.setString(4, book.getDescription());
+            ps.setString(5, book.getImageUrl());
+            ps.setString(6, book.getCondition());
+            ps.setInt(7, book.getSellerId());
+            ps.setInt(8, book.getCategoryId());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<Book> findPendingBooks() {
+        List<Book> list = new ArrayList<>();
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(FIND_PENDING);
+             ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
                 Book b = new Book();
                 b.setId(rs.getInt("id"));
                 b.setTitle(rs.getString("title"));
                 b.setAuthor(rs.getString("author"));
                 b.setPrice(rs.getBigDecimal("price"));
-
-                // FIX QUAN TRỌNG NHẤT
-                b.setImageUrl(rs.getString("image_url"));  
-
-                b.setSellerId(rs.getInt("seller_id"));
                 b.setStatus(rs.getString("status"));
-                b.setDescription(rs.getString("description"));
-
+                b.setSellerName(rs.getString("fullname"));
                 list.add(b);
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
-    }
-    @Override
-    public List<Book> searchSuggest(String keyword) {
-        List<Book> list = new ArrayList<>();
-
-        String sql = """
-            SELECT TOP 10 *
-            FROM books
-            WHERE title LIKE ?
-            ORDER BY
-              CASE
-                WHEN title LIKE ? THEN 0
-                ELSE 1
-              END,
-              title
-        """;
-
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, "%" + keyword + "%"); // chứa
-            ps.setString(2, keyword + "%");       // bắt đầu
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Book b = new Book();
-                    b.setId(rs.getInt("id"));
-                    b.setTitle(rs.getString("title"));
-                    b.setAuthor(rs.getString("author"));
-                    b.setPrice(rs.getBigDecimal("price"));
-                    b.setImageUrl(rs.getString("image_url"));
-                    b.setDescription(rs.getString("description"));
-                    b.setStatus(rs.getString("status"));
-                    b.setSellerId(rs.getInt("seller_id"));
-                    list.add(b);
-                }
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
 
+    @Override
+    public void updateStatus(int bookId, String status) {
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_STATUS)) {
+
+            ps.setString(1, status);
+            ps.setInt(2, bookId);
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<Book> findApprovedBooks() {
+        List<Book> list = new ArrayList<>();
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(FIND_APPROVED);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Book b = new Book();
+                b.setId(rs.getInt("id"));
+                b.setTitle(rs.getString("title"));
+                list.add(b);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    @Override
+    public void insertActive(Book book) {
+        String sql = "INSERT INTO books(title, author, price, description, image_url,[condition], status, seller_id, category_id)"
+        		+ "VALUES (?, ?, ?, ?, ?, ?, 'ACTIVE', ?, ?)";
+
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, book.getTitle());
+            ps.setString(2, book.getAuthor());
+            ps.setBigDecimal(3, book.getPrice());
+            ps.setString(4, book.getDescription());
+            ps.setString(5, book.getImageUrl());
+            ps.setString(6, book.getCondition());
+            ps.setInt(7, book.getSellerId());
+            ps.setInt(8, book.getCategoryId());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+	@Override
+	public void approveBook(int bookId) {
+		updateStatus(bookId, "ACTIVE");	
+	}
+
+	@Override
+	public void rejectBook(int bookId) {
+		updateStatus(bookId, "INACTIVE");
+		
+	}
 }

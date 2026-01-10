@@ -6,20 +6,36 @@ import java.util.List;
 import model.Book;
 
 public interface IBookDAO {
+	// Lấy 10 cuốn sách mới nhất làm "sách nổi bật"
+	List<Book> getFeaturedBooks();
 
-    List<Book> getFeaturedBooks();
+	// tìm book theo id
+	Book findBookId(int id);
 
-    Book findBookId(int id);
+	// Tìm sách theo từ khóa (title hoặc author)
+	List<Book> search(String keyword);
 
-    // Search đầy đủ (Enter)
-    List<Book> search(String keyword);
+	// Lọc sách theo giá (min/max) và tình trạng (new/used/null)
+	List<Book> filter(BigDecimal min, BigDecimal max, Integer categoryId, String sort, String condition);
 
-    // 🔥 Search gợi ý (AJAX – tối đa 10, theo title)
-    List<Book> searchSuggest(String keyword);
+	// Thêm sách mới, trả về id vừa tạo
+//    int insertBook(Book b);
+	List<Book> getBooksByIds(List<Integer> ids);
 
-    List<Book> filter(BigDecimal minPrice, BigDecimal maxPrice, String condition);
+	// user
+	void insertPending(Book book);
 
-    int insertBook(Book b);
+	// admin
+	void insertActive(Book book);
 
-    List<Book> getBooksByIds(List<Integer> ids);
+	void approveBook(int bookId);
+
+	void rejectBook(int bookId);
+
+	// query
+	List<Book> findPendingBooks();
+
+	void updateStatus(int bookId, String status);
+
+	List<Book> findApprovedBooks();
 }
