@@ -5,6 +5,7 @@ public class OrderDetail {
     private int id;         // ID của dòng chi tiết (tương ứng DB)
     private int orderId;    // Cần thêm cái này để map với DB
     private int bookId;
+    private String bookTitle;
     private int quantity;
     private BigDecimal price; // Đổi từ double sang BigDecimal
 
@@ -33,8 +34,12 @@ public class OrderDetail {
     public BigDecimal getPrice() { return price; }
     public void setPrice(BigDecimal price) { this.price = price; }
     
+    public String getBookTitle() { return bookTitle; }
+    public void setBookTitle(String bookTitle) { this.bookTitle = bookTitle; }
+    
     // Tính tổng tiền dòng này: price * quantity
     public BigDecimal getLineTotal() {
         return price.multiply(new BigDecimal(quantity));
     }
+    
 }

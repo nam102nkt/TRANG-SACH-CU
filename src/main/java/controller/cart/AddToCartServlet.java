@@ -22,30 +22,31 @@ import dao.IBookDAO;
 @WebServlet("/add-to-cart")
 public class AddToCartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private ICartService cartService = new CartServiceImpl();
-    private IBookDAO bookDAO = new BookDAOImpl();
+	private ICartService cartService = new CartServiceImpl();
+	private IBookDAO bookDAO = new BookDAOImpl();
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        int bookId = Integer.parseInt(req.getParameter("bookId"));
-        int qty = Integer.parseInt(req.getParameter("quantity"));
+		int bookId = Integer.parseInt(req.getParameter("bookId"));
+		int qty = Integer.parseInt(req.getParameter("quantity"));
 
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
+		HttpSession session = req.getSession();
+		User user = (User) session.getAttribute("user");
 
-        Cart cart = (Cart) session.getAttribute("cart");
-        if (cart == null) cart = new Cart();
+		Cart cart = (Cart) session.getAttribute("cart");
+		if (cart == null)
+			cart = new Cart();
 
-        if (user == null) {
-            Book b = bookDAO.findBookId(bookId);
-            cart.add(b, qty);
-        } else {
-            cartService.add(user.getId(), bookId, qty);
-            cart = cartService.getCart(user.getId());
-        }
+		if (user == null) {
+			Book b = bookDAO.findBookId(bookId);
+			cart.add(b, qty);
+		} else {
+			cartService.add(user.getId(), bookId, qty);
+			cart = cartService.getCart(user.getId());
+		}
 
-        session.setAttribute("cart", cart);
-        resp.sendRedirect("cart");
-    }
+		session.setAttribute("cart", cart);
+		resp.sendRedirect("cart");
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse

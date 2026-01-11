@@ -7,7 +7,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 public class DBContext {
 
-    // --- CẤU HÌNH THÔNG TIN KẾT NỐI (GIỮ NGUYÊN CỦA BẠN) ---
+    // --- Cáº¤U HÃŒNH THÃ”NG TIN Káº¾T Ná»�I (GIá»® NGUYÃŠN Cá»¦A Báº N) ---
     private static final String DB_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
     private static final String DB_URL =
     	    "jdbc:sqlserver://localhost;"
@@ -20,53 +20,53 @@ public class DBContext {
     private static final String DB_USER = "sa";
     private static final String DB_PASSWORD = "123"; 
 
-    // Biến giữ hồ kết nối (Connection Pool)
-    // Chỉ tạo 1 lần duy nhất cho toàn bộ ứng dụng (static)
+    // Biáº¿n giá»¯ há»“ káº¿t ná»‘i (Connection Pool)
+    // Chá»‰ táº¡o 1 láº§n duy nháº¥t cho toÃ n bá»™ á»©ng dá»¥ng (static)
     private static HikariDataSource dataSource;
 
-    // Khối static: Chạy 1 lần duy nhất khi ứng dụng bắt đầu
+    // Khá»‘i static: Cháº¡y 1 láº§n duy nháº¥t khi á»©ng dá»¥ng báº¯t Ä‘áº§u
     static {
         try {
             HikariConfig config = new HikariConfig();
             
-            // 1. Cấu hình cơ bản
+            // 1. Cáº¥u hÃ¬nh cÆ¡ báº£n
             config.setDriverClassName(DB_DRIVER);
             config.setJdbcUrl(DB_URL);
             config.setUsername(DB_USER);
             config.setPassword(DB_PASSWORD);
             
-            // 2. Cấu hình tối ưu cho HikariCP (Tùy chỉnh)
-            config.setMinimumIdle(5);           // Giữ ít nhất 5 kết nối rảnh
-            config.setMaximumPoolSize(20);      // Tối đa 20 kết nối cùng lúc
-            config.setConnectionTimeout(30000); // Chờ tối đa 30s để lấy kết nối
-            config.setIdleTimeout(600000);      // 10 phút không dùng thì đóng bớt kết nối rảnh
+            // 2. Cáº¥u hÃ¬nh tá»‘i Æ°u cho HikariCP (TÃ¹y chá»‰nh)
+            config.setMinimumIdle(5);           // Giá»¯ Ã­t nháº¥t 5 káº¿t ná»‘i ráº£nh
+            config.setMaximumPoolSize(20);      // Tá»‘i Ä‘a 20 káº¿t ná»‘i cÃ¹ng lÃºc
+            config.setConnectionTimeout(30000); // Chá»� tá»‘i Ä‘a 30s Ä‘á»ƒ láº¥y káº¿t ná»‘i
+            config.setIdleTimeout(600000);      // 10 phÃºt khÃ´ng dÃ¹ng thÃ¬ Ä‘Ã³ng bá»›t káº¿t ná»‘i ráº£nh
 
-            // 3. Tạo DataSource
+            // 3. Táº¡o DataSource
             dataSource = new HikariDataSource(config);
             
         } catch (Exception e) {
-        	 throw new ExceptionInInitializerError("Không khởi tạo được HikariCP: " + e.getMessage());
+        	 throw new ExceptionInInitializerError("KhÃ´ng khá»Ÿi táº¡o Ä‘Æ°á»£c HikariCP: " + e.getMessage());
         }
     }
 
-    // --- HÀM NÀY GIỮ NGUYÊN TÊN VÀ KIỂU TRẢ VỀ ---
-    // Các file khác gọi hàm này sẽ không biết sự thay đổi bên trong
+    // --- HÃ€M NÃ€Y GIá»® NGUYÃŠN TÃŠN VÃ€ KIá»‚U TRáº¢ Vá»€ ---
+    // CÃ¡c file khÃ¡c gá»�i hÃ m nÃ y sáº½ khÃ´ng biáº¿t sá»± thay Ä‘á»•i bÃªn trong
     public static Connection getConnection() throws SQLException {
         if (dataSource == null) {
-            throw new SQLException("HikariDataSource chưa được khởi tạo!");
+            throw new SQLException("HikariDataSource chÆ°a Ä‘Æ°á»£c khá»Ÿi táº¡o!");
         }
-        return dataSource.getConnection(); // Lấy kết nối từ hồ chứa
+        return dataSource.getConnection(); // Láº¥y káº¿t ná»‘i tá»« há»“ chá»©a
     }
 
-    // Test thử kết nối
+    // Test thá»­ káº¿t ná»‘i
     public static void main(String[] args) {
         try (Connection conn = getConnection()) {
             if (conn != null) {
-                System.out.println("Kết nối SQL Server qua HikariCP thành công!");
-                System.out.println("Tên DB: " + conn.getCatalog());
+                System.out.println("Káº¿t ná»‘i SQL Server qua HikariCP thÃ nh cÃ´ng!");
+                System.out.println("TÃªn DB: " + conn.getCatalog());
             }
         } catch (SQLException e) {
-            System.err.println("Lỗi kết nối:");
+            System.err.println("Lá»—i káº¿t ná»‘i:");
             e.printStackTrace();
         }
     }

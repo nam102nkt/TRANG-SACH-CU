@@ -38,4 +38,6 @@ public interface IBookDAO {
 	void updateStatus(int bookId, String status);
 
 	List<Book> findApprovedBooks();
+
+	List<Book> searchSuggest(String keyword);
 }

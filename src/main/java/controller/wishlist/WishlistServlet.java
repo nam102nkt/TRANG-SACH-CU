@@ -73,7 +73,7 @@ public class WishlistServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
         Object u = session.getAttribute("user");
-        JsonObject json = new JsonObject();
+		JsonObject json = new JsonObject();
 
         if (u == null) {
             json.addProperty("success", false);
