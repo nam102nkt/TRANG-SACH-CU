@@ -1,16 +1,38 @@
-@charset "UTF-8";
-.search-result-container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 20px;
+/* vùng search */
+.search-area {
+    position: relative;
 }
 
-.search-item {
-    display: flex;
-    gap: 20px;
-    background: #fff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    margin-bottom: 15px;
+/* hộp gợi ý */
+.search-suggest {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    z-index: 9999;
+    display: none;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+/* từng dòng gợi ý */
+.suggest-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+/* hover */
+.suggest-item:hover {
+    background-color: #f2f2f2;
+}
+
+/* highlight keyword */
+.suggest-item strong {
+    color: #e53935;
+    font-weight: 600;
 }

@@ -64,44 +64,54 @@
 					</form>
 				</c:if>
 
-				<c:if test="${currentTab == 'orders'}">
-					<div class="profile-header">
-						<h2>Đơn hàng của tôi</h2>
-						<p>Xem lại lịch sử mua hàng</p>
-					</div>
+			<c:if test="${currentTab == 'orders'}">
+    <div class="profile-header">
+        <h2>Đơn hàng của tôi</h2>
+        <p>Xem lại lịch sử mua hàng</p>
+    </div>
 
-					<table class="order-table">
-						<thead>
-							<tr>
-								<th>Mã đơn hàng</th>
-								<th>Ngày đặt</th>
-								<th>Địa chỉ</th>
-								<th>Giá trị</th>
-								<th>Trạng thái</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${orders}" var="o">
-								<tr>
-									<td><b>#${o.id}</b></td>
-									<td>${o.orderDate}</td>
-									<td style="color: #e44d26; font-weight: bold;">
-									<fmt:formatNumber value="${o.totalPrice}" type="currency" currencySymbol="VN₫" />
-									</td>
-									<td><span
-										class="status-badge ${o.status == 'Đã giao' ? 'status-success' : 'status-pending'}">
-											${o.status} </span></td>
-								</tr>
-							</c:forEach>
-							<c:if test="${empty orders}">
-								<tr>
-									<td colspan="5" style="text-align: center;">Bạn chưa có
-										đơn hàng nào.</td>
-								</tr>
-							</c:if>
-						</tbody>
-					</table>
-				</c:if>
+    <table class="order-table">
+        <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Ngày đặt</th>
+                <th>Địa chỉ giao hàng</th>
+                <th>Giá trị</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach items="${orders}" var="o">
+                <tr>
+                    <td><b>#${o.id}</b>
+                        <c:if test="${sessionScope.latestOrderId == o.id}">
+                            <span class="new-order-badge">Mới</span>
+                        </c:if>
+                    </td>
+                 <td><fmt:formatDate value="${o.orderDateAsDate}" pattern="dd/MM/yyyy HH:mm" /></td>
+<td>${o.shippingAddress}</td>
+
+                    <td><fmt:formatNumber value="${o.totalPrice}" type="currency" currencySymbol="VN₫" /></td>
+                    <td>
+                        <span class="status-badge ${o.status == 'Đã giao' ? 'status-success' : 'status-pending'}">
+                            ${o.status}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="order_detail?orderId=${o.id}" class="btn-view">Xem chi tiết</a>
+                    </td>
+                </tr>
+            </c:forEach>
+
+            <c:if test="${empty orders}">
+                <tr>
+                    <td colspan="6" style="text-align: center;">Bạn chưa có đơn hàng nào.</td>
+                </tr>
+            </c:if>
+        </tbody>
+    </table>
+</c:if>
 
 				<c:if test="${currentTab == 'password'}">
 					<div class="profile-header">

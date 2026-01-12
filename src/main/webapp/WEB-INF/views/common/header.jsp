@@ -12,17 +12,23 @@
                 </a>
             </div>
 
-            <div class="search-area">
-                <form action="${pageContext.request.contextPath}/search"
-                      method="GET" class="search-form">
-                    <input type="text" name="query"
-                           placeholder="Tìm sản phẩm bạn mong muốn...">
-                    <button type="submit">
-                        <img src="${pageContext.request.contextPath}/assets/images/search_icon.png"
-                             class="search-icon">
-                    </button>
-                </form>
-            </div>
+           <div class="search-area">
+    <form action="search" method="GET" class="search-form">
+        <input type="text"
+               name="query"
+               id="searchInput"
+               placeholder="Tìm sản phẩm bạn mong muốn..."
+               maxlength="150"
+               autocomplete="off">
+
+        <button type="submit">
+            <img src="${pageContext.request.contextPath}/assets/images/search_icon.png"
+                 alt="Tìm" class="search-icon">
+        </button>
+
+        <div id="searchSuggest" class="search-suggest"></div>
+    </form>
+</div>
 
             <div class="user-area">
                 <c:if test="${sessionScope.user == null}">
@@ -68,5 +74,11 @@
             <a href="#" class="nav-item">Liên hệ</a>
         </div>
     </nav>
+<link rel="stylesheet"
+      href="${pageContext.request.contextPath}/assets/css/search.css">
+<script>
+    const contextPath = "${pageContext.request.contextPath}";
+</script>
+<script src="${pageContext.request.contextPath}/assets/js/search.js"></script>
 
 </header>

@@ -9,25 +9,26 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/base.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/assets/css/order.css">
+	href="${pageContext.request.contextPath}/assets/css/checkout_success.css">
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
-	<div class="container success-box">
-		<h1>Thanh toán thành công!</h1>
+	<main class="checkout-container">
+		<div class="container">
+			<div class="success-box">
+				<h2>Thanh toán thành công!</h2>
+				<p>Mã đơn hàng: #${orderId}</p>
+				<a href="${pageContext.request.contextPath}/"
+					class="btn btn-primary">Về trang chủ</a> <a
+					href="${pageContext.request.contextPath}/order_detail?orderId=${orderId}"
+					class="btn btn-secondary">Xem chi tiết đơn</a>
 
-		<c:if test="${not empty orderId}">
-			<p>
-				Mã đơn hàng: <strong>#${orderId}</strong>
-			</p>
-		</c:if>
-
-		<a href="${pageContext.request.contextPath}/" class="btn btn-primary">Về
-			trang chủ</a> <a href="${pageContext.request.contextPath}/orders"
-			class="btn btn-secondary">Xem lịch sử đơn</a>
-	</div>
+			</div>
+		</div>
+	</main>
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+
 </body>
 </html>
