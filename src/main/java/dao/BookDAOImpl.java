@@ -290,18 +290,16 @@ public class BookDAOImpl implements IBookDAO {
 	public List<Book> searchSuggest(String keyword) {
 		List<Book> list = new ArrayList<>();
 
-		String sql = """
-				    SELECT TOP 10 id, title, author, price, image_url
-				    FROM books
-				    WHERE status = 'ACTIVE'
-				      AND title LIKE ?
-				    ORDER BY
-				      CASE
-				        WHEN title LIKE ? THEN 0
-				        ELSE 1
-				      END,
-				      title
-				""";
+		String sql = "SELECT TOP 10 id, title, author, price, image_url"
+				+ "FROM books"
+				+ "WHERE status = 'ACTIVE'"
+				+ "AND title LIKE ?"
+				+ "ORDER BY"
+				+ "CASE"
+				+ "WHEN title LIKE ? THEN 0"
+				+ "ELSE 1"
+				+ "END,"
+				+ "title";
 
 		try (Connection conn = DBContext.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 

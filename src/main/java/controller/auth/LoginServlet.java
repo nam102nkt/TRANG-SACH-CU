@@ -40,6 +40,8 @@ public class LoginServlet extends HttpServlet {
 
 		if (user != null) {
 		    session.setAttribute("user", user);
+		    Cart cart = cartService.getCart(user.getId());
+		    session.setAttribute("cart", cart);
 
 		    switch (user.getRole()) {
 		        case "ADMIN":

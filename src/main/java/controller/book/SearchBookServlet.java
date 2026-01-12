@@ -8,7 +8,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 
 /** Tìm kiếm sách theo từ khóa */
-@WebServlet("/search")
+@WebServlet("/search_book")
 public class SearchBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private IBookService bookService = new BookServiceImpl();
