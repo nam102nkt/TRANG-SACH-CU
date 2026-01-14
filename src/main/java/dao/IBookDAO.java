@@ -2,9 +2,7 @@ package dao;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
-import model.AuthorStats;
 import model.Book;
 import model.Category;
 
@@ -46,9 +44,4 @@ public interface IBookDAO {
 	List<Book> findApprovedBooks();
 
 	List<Book> searchSuggest(String keyword);
-	
-	// hiển thị top tác giả 
-	public List<AuthorStats> getAllAuthors();
-	public List<AuthorStats> findTopAuthors(int limit);
-	public Map<Category, List<Book>> findGroupedByCategory(int limitEach);
 }

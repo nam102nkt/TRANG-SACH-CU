@@ -5,13 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.AuthorStats;
-import model.Book;
-import model.Category;
-
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import service.BookServiceImpl;
 import service.IBookService;
@@ -24,13 +18,8 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	List<Book> featuredBooks = bookService.getFeaturedBooks();
-    	List<AuthorStats> topAuthors = bookService.getTopAuthors(6);
-    	Map<Category, List<Book>> booksByCategory = bookService.getBooksGroupedByCategory(6);
 
-        request.setAttribute("featuredBooks", featuredBooks);
-        request.setAttribute("topAuthors", topAuthors);
-        request.setAttribute("booksByCategory", booksByCategory);
+        request.setAttribute("featuredBooks", bookService.getFeaturedBooks());
         request.getRequestDispatcher("/WEB-INF/views/book/index.jsp").forward(request, response);
     }
 
