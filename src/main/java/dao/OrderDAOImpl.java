@@ -1,6 +1,8 @@
 package dao;
 
 import model.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
 import java.sql.*;
@@ -263,5 +265,41 @@ public class OrderDAOImpl implements IOrderDAO {
 			return false;
 		}
 	}
+	public void markAsPaid(int orderId) {
+	    String sql = "UPDATE orders SET status = 'PAID' WHERE id = ? AND status = 'PENDING'";
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql)) {
+
+	        ps.setInt(1, orderId);
+	        ps.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	public List<Order> findPendingOrders() {
+	    List<Order> list = new ArrayList<>();
+	    String sql = "SELECT o.id, o.total_price, o.status, u.fullname " +
+	             "FROM orders o JOIN users u ON o.user_id = u.id " +
+	             "WHERE o.status = 'PENDING'";
+
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            Order o = new Order();
+	            o.setId(rs.getInt("id"));
+	            o.setTotalPrice(rs.getBigDecimal("total_price"));
+	            o.setStatus(rs.getString("status"));
+	            o.setFullName(rs.getString("fullname"));
+	            list.add(o);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+
 
 }

@@ -22,4 +22,6 @@ public interface IOrderDAO {
 
 	public boolean cancelOrder(int orderId, int userId);
 
+	void markAsPaid(int orderId);
+	List<Order> findPendingOrders();
 }

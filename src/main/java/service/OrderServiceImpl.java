@@ -29,4 +29,12 @@ public class OrderServiceImpl implements IOrderService {
 		// TODO Auto-generated method stub
 		return orderDAO.getDetail(orderId, userId);
 	}
+	public void confirmPayment(int orderId) {
+	    orderDAO.markAsPaid(orderId);
+	}
+
+	public List<Order> getPendingOrders() {
+	    return orderDAO.findPendingOrders();
+	}
+
 }

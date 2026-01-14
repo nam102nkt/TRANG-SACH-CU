@@ -27,7 +27,7 @@ public class ManageBooksServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Book> books = service.getAllBooks();
+        List<Book> books = bookDAO.findPendingBooks();
         request.setAttribute("books", books);
         
         request.setAttribute("contentPage", "/WEB-INF/views/admin/books.jsp");

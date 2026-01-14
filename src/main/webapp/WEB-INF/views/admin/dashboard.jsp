@@ -5,21 +5,21 @@
 <div class="dashboard">
     <div class="card blue">
         <h3>Tổng User</h3>
-        <p>${totalUsers}</p>
+        <p>${userCount}</p>
     </div>
 
     <div class="card green">
-        <h3>Sách chờ duyệt</h3>
-        <p>${pendingBooks}</p>
+        <h3>Số lượng sách</h3>
+        <p>${bookCount}</p>
     </div>
 
     <div class="card orange">
         <h3>Đơn hàng</h3>
-        <p>${totalOrders}</p>
+        <p>${orderCount}</p>
     </div>
 
     <div class="card red">
         <h3>Doanh thu</h3>
-        <p>${totalRevenue}</p>
+        <p>${revenue}</p>
     </div>
 </div>

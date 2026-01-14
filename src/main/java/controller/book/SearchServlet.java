@@ -3,8 +3,6 @@ package controller.book;
 import java.io.IOException;
 import java.util.List;
 
-import com.google.gson.Gson;
-
 import dao.BookDAOImpl;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +13,7 @@ import model.Book;
 
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
-
+	private static final long serialVersionUID = 1L;
 	private BookDAOImpl bookDAO = new BookDAOImpl();
 
 	protected void doGet(HttpServletRequest rq, HttpServletResponse rs) throws IOException, ServletException {

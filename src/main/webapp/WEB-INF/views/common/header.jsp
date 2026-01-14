@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/search.css">
 <header class="site-header">
 
     <div class="header-top">
@@ -74,8 +74,7 @@
             <a href="#" class="nav-item">Liên hệ</a>
         </div>
     </nav>
-<link rel="stylesheet"
-      href="${pageContext.request.contextPath}/assets/css/search.css">
+
 <script>
     const contextPath = "${pageContext.request.contextPath}";
 </script>

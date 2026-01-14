@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,12 +29,14 @@
 
 					<a href="profile?tab=info"
 						class="${currentTab == 'info' ? 'active' : ''}"> Hồ sơ của tôi
-					</a> <a href="sell_book">Bán sách</a> <a href="profile?tab=orders"
-						class="${currentTab == 'orders' ? 'active' : ''}"> Quản lý đơn
-						hàng </a> <a href="wishlist">Danh sách yêu thích</a> <a
-						href="profile?tab=password"
-						class="${currentTab == 'password' ? 'active' : ''}"> Đổi mật
-						khẩu </a> <a href="logout" style="color: red;">Đăng xuất</a>
+					</a> 
+					<c:if test="${sessionScope.user.role eq 'SELLER'}">
+        				<a href="${pageContext.request.contextPath}/seller/book">Bán sách</a>
+    				</c:if> 
+					<a href="profile?tab=orders" class="${currentTab == 'orders' ? 'active' : ''}"> Quản lý đơn hàng </a> 
+					<a href="wishlist">Danh sách yêu thích</a> 
+					<a href="profile?tab=password" class="${currentTab == 'password' ? 'active' : ''}"> Đổi mật khẩu </a> 
+					<a href="logout" style="color: red;">Đăng xuất</a>
 
 				</nav>
 			</aside>

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html>
@@ -32,9 +32,7 @@
 					<option value="100000000">>100k</option>
 				</select> <select name="category">
 					<option value="">Thể loại</option>
-					<c:forEach items="${categories}" var="c">
-						<option value="${c.id}">${c.name}</option>
-					</c:forEach>
+					<option <c:forEach items="${category}" var="c"> <option value="${c.id}">${c.name}</option> </c:forEach> >
 				</select> <select name="condition">
 					<option value="">Tình trạng</option>
 					<option value="NEW">Mới</option>

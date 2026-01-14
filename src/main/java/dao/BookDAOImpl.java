@@ -1,6 +1,7 @@
 package dao;
 
 import model.Book;
+import model.Category;
 import java.sql.*;
 import java.util.*;
 import java.math.BigDecimal;
@@ -160,6 +161,24 @@ public class BookDAOImpl implements IBookDAO {
 		}
 		return list;
 	}
+	
+	public List<Category> findAll() {
+	    List<Category> list = new ArrayList<>();
+	    String sql = "SELECT id, name FROM categories";
+
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            list.add(new Category(rs.getInt("id"), rs.getString("name")));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+
 
 	@Override
 	public void insertPending(Book book) {
@@ -204,18 +223,23 @@ public class BookDAOImpl implements IBookDAO {
 		return list;
 	}
 
-	@Override
+	private static final Set<String> VALID_STATUS = Set.of("PENDING","ACTIVE","INACTIVE");
+
 	public void updateStatus(int bookId, String status) {
-		try (Connection conn = DBContext.getConnection(); PreparedStatement ps = conn.prepareStatement(UPDATE_STATUS)) {
+	    if (!VALID_STATUS.contains(status))
+	        throw new IllegalArgumentException("Invalid status");
 
-			ps.setString(1, status);
-			ps.setInt(2, bookId);
-			ps.executeUpdate();
+	    try (Connection conn = DBContext.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(UPDATE_STATUS)) {
 
-		} catch (Exception e) {
+	        ps.setString(1, status);
+	        ps.setInt(2, bookId);
+	        ps.executeUpdate();
+	    } catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
 
 	@Override
 	public List<Book> findApprovedBooks() {
@@ -236,7 +260,7 @@ public class BookDAOImpl implements IBookDAO {
 		return list;
 	}
 
-	@Override
+	@Deprecated
 	public void insertActive(Book book) {
 		String sql = "INSERT INTO books(title, author, price, description, image_url,[condition], status, seller_id, category_id)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, 'ACTIVE', ?, ?)";
@@ -296,14 +320,50 @@ public class BookDAOImpl implements IBookDAO {
 		return list;
 	}
 
-	@Override
-	public void approveBook(int bookId) {
-		updateStatus(bookId, "ACTIVE");
+	public boolean approveBook(int bookId) {
+	    String sql = "UPDATE books SET status = 'ACTIVE' WHERE id = ? AND status = 'PENDING'";
+
+	    try (Connection conn = DBContext.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+	        ps.setInt(1, bookId);
+	        int updated = ps.executeUpdate();
+	        return updated > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
-	@Override
-	public void rejectBook(int bookId) {
-		updateStatus(bookId, "INACTIVE");
+	public boolean rejectBook(int bookId) {
+	    String sql = "UPDATE books SET status = 'INACTIVE' WHERE id = ? AND status = 'PENDING'";
+	    try (Connection conn = DBContext.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
 
+	        ps.setInt(1, bookId);
+	        return ps.executeUpdate() > 0;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
+	
+	public List<Book> findProcessedBooks() {
+	    String sql = "SELECT * FROM books WHERE status IN ('ACTIVE','INACTIVE')";
+	    List<Book> list = new ArrayList<>();
+	    try (Connection conn = DBContext.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) list.add(map(rs));
+	    } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return list;
+	}
+
+
 }

@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.User;
 
-@WebFilter("/*")
+@WebFilter("/auth/*")
 public class AuthFilter implements Filter {
 
     @Override
@@ -26,7 +26,7 @@ public class AuthFilter implements Filter {
         String uri = request.getRequestURI();
 
         // ADMIN chỉ được vào /admin/*
-        if (uri.contains("/admin")) {
+        if (uri.startsWith(request.getContextPath() + "/admin")) {
             if (user == null || !"ADMIN".equals(user.getRole())) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
                 return;

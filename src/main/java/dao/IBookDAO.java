@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import model.Book;
+import model.Category;
 
 public interface IBookDAO {
 	// Lấy 10 cuốn sách mới nhất làm "sách nổi bật"
@@ -21,6 +22,7 @@ public interface IBookDAO {
 	// Thêm sách mới, trả về id vừa tạo
 //    int insertBook(Book b);
 	List<Book> getBooksByIds(List<Integer> ids);
+	List<Category> findAll();
 
 	// user
 	void insertPending(Book book);
@@ -28,9 +30,11 @@ public interface IBookDAO {
 	// admin
 	void insertActive(Book book);
 
-	void approveBook(int bookId);
+	boolean approveBook(int bookId);
 
-	void rejectBook(int bookId);
+	boolean rejectBook(int bookId);
+	
+	List<Book> findProcessedBooks();
 
 	// query
 	List<Book> findPendingBooks();

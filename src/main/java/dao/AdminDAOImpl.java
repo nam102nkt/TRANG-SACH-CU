@@ -90,27 +90,33 @@ public class AdminDAOImpl implements IAdminDAO {
 
 	public List<Order> getAllOrders() {
 	    List<Order> list = new ArrayList<>();
-	    String sql = "SELECT o.*, u.username"
-	    		+ "FROM orders o"
-	    		+ "JOIN users u ON o.user_id = u.id";
 
-	    try (Connection con = DBContext.getConnection();
-	         PreparedStatement ps = con.prepareStatement(sql);
+	    String sql = "SELECT o.id, o.total_price, o.status, u.fullname FROM orders o "
+	    		+ "JOIN users u ON o.user_id = u.id "
+	    		+ "ORDER BY "
+	    		+ "CASE WHEN o.status = 'PENDING' THEN 0 ELSE 1 END, "
+	    		+ "o.id DESC";
+
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql);
 	         ResultSet rs = ps.executeQuery()) {
 
 	        while (rs.next()) {
 	            Order o = new Order();
 	            o.setId(rs.getInt("id"));
-	            o.setFullName(rs.getString("username"));
 	            o.setTotalPrice(rs.getBigDecimal("total_price"));
 	            o.setStatus(rs.getString("status"));
+	            o.setFullName(rs.getString("fullname"));
 	            list.add(o);
 	        }
+
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+
 	    return list;
 	}
+
 
 	public void updateOrderStatus(int id, String status) {
 	    String sql = "UPDATE orders SET status=? WHERE id=?";
@@ -140,9 +146,8 @@ public class AdminDAOImpl implements IAdminDAO {
 	        while (rs.next()) {
 	            User u = new User();
 	            u.setId(rs.getInt("id"));
-	            u.setFullName(rs.getString("username"));
+	            u.setEmail(rs.getString("email"));
 	            u.setRole(rs.getString("role"));
-	            u.setRole(rs.getString("status"));
 	            list.add(u);
 	        }
 	    } catch (Exception e) {

@@ -42,6 +42,7 @@ public class Cart {
 	 */
 
 	public void add(Book book, int qty) {
+		if (qty <= 0) throw new IllegalArgumentException();
 		CartItem item = items.get(book.getId());
 		if (item == null) {
 			items.put(book.getId(), new CartItem(book, qty));

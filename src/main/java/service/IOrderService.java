@@ -14,4 +14,7 @@ public interface IOrderService {
 	Order getOrderDetail(int orderId, int userId);
 
 	Order checkout(int userId, Cart cart, String address);
+	public void confirmPayment(int orderId);
+
+	public List<Order> getPendingOrders();
 }

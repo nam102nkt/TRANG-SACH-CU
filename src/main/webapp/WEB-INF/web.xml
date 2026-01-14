@@ -1,67 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
-                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
-         version="5.0">
-
-    <display-name>OldBookStore</display-name>
-
-    <welcome-file-list>
-        <welcome-file>home</welcome-file>
-    </welcome-file-list>
-
-    <!-- Logout -->
-    <servlet>
-        <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>controller.LogoutServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>LogoutServlet</servlet-name>
-        <url-pattern>/LogoutServlet</url-pattern>
-    </servlet-mapping>
-
-    <!-- Home -->
-    <servlet>
-        <servlet-name>HomeServlet</servlet-name>
-        <servlet-class>controller.HomeServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>HomeServlet</servlet-name>
-        <url-pattern>/HomeServlet</url-pattern>
-    </servlet-mapping>
-
-    <!-- Profile -->
-    <servlet>
-        <servlet-name>ProfileServlet</servlet-name>
-        <servlet-class>controller.ProfileServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ProfileServlet</servlet-name>
-        <url-pattern>/ProfileServlet</url-pattern>
-    </servlet-mapping>
-
-    <!-- Add to cart -->
-    <servlet>
-        <servlet-name>AddToCartServlet</servlet-name>
-        <servlet-class>controller.AddToCartServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>AddToCartServlet</servlet-name>
-        <url-pattern>/AddToCartServlet</url-pattern>
-    </servlet-mapping>
-
-    <!-- Remove from cart -->
-    <servlet>
-        <servlet-name>RemoveFromCartServlet</servlet-name>
-        <servlet-class>controller.RemoveFromCartServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>RemoveFromCartServlet</servlet-name>
-        <url-pattern>/RemoveFromCartServlet</url-pattern>
-    </servlet-mapping>
-
-    <!-- ❗ KHÔNG CÓ ProductDetailServlet dưới đây nữa! -->
-    <!-- Nó đã được quản lý bằng @WebServlet("/product-detail") -->
-
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="5.0">
+  <display-name>OldBookStore</display-name>
+  <welcome-file-list>
+    <welcome-file>home</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>controller.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/LogoutServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>HomeServlet</servlet-name>
+    <servlet-class>controller.HomeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HomeServlet</servlet-name>
+    <url-pattern>/HomeServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ProfileServlet</servlet-name>
+    <servlet-class>controller.ProfileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProfileServlet</servlet-name>
+    <url-pattern>/ProfileServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>AddToCartServlet</servlet-name>
+    <servlet-class>controller.AddToCartServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddToCartServlet</servlet-name>
+    <url-pattern>/AddToCartServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>RemoveFromCartServlet</servlet-name>
+    <servlet-class>controller.RemoveFromCartServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoveFromCartServlet</servlet-name>
+    <url-pattern>/RemoveFromCartServlet</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <display-name>RoleFilter</display-name>
+    <filter-name>RoleFilter</filter-name>
+    <filter-class>filter.RoleFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>RoleFilter</filter-name>
+    <url-pattern>/RoleFilter</url-pattern>
+  </filter-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SellBookFormServlet</display-name>
+    <servlet-name>SellBookFormServlet</servlet-name>
+    <servlet-class>controller.book.SellBookFormServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SellBookFormServlet</servlet-name>
+    <url-pattern>/SellBookFormServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AdminProcessedBooksServlet</display-name>
+    <servlet-name>AdminProcessedBooksServlet</servlet-name>
+    <servlet-class>controller.book.AdminProcessedBooksServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminProcessedBooksServlet</servlet-name>
+    <url-pattern>/AdminProcessedBooksServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AdminConfirmOrderServlet</display-name>
+    <servlet-name>AdminConfirmOrderServlet</servlet-name>
+    <servlet-class>controller.admin.AdminConfirmOrderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminConfirmOrderServlet</servlet-name>
+    <url-pattern>/AdminConfirmOrderServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

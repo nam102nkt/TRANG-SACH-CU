@@ -5,10 +5,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.User;
 import service.AdminServiceImpl;
 import service.IAdminService;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Servlet implementation class ManageUsersServlet
@@ -19,7 +21,9 @@ public class ManageUsersServlet extends HttpServlet {
 	private IAdminService service = new AdminServiceImpl();
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setAttribute("users", service.getAllUsers());
+		
+		List<User> users = service.getAllUsers();
+		req.setAttribute("users", users);
 
 		req.setAttribute("contentPage", "users.jsp");
 

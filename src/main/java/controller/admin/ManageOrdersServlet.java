@@ -5,10 +5,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Order;
 import service.AdminServiceImpl;
 import service.IAdminService;
 
 import java.io.IOException;
+import java.util.List;
+
+import dao.BookDAOImpl;
+import dao.IBookDAO;
+import dao.IOrderDAO;
+import dao.OrderDAOImpl;
 
 /**
  * Servlet implementation class ManageOrdersServlet
@@ -19,7 +26,10 @@ public class ManageOrdersServlet extends HttpServlet {
 	private IAdminService service = new AdminServiceImpl();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("orders", service.getAllOrders());
+        
+    	List<Order> orders = service.getAllOrders();
+    	System.out.println(" "+ req.getParameter("orders.size()"));
+    	req.setAttribute("orders", orders);
         
 		req.setAttribute("contentPage", "/WEB-INF/views/admin/orders.jsp");
 

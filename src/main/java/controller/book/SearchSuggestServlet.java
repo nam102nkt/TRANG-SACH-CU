@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @WebServlet("/search-suggest")
 public class SearchSuggestServlet extends HttpServlet {
-
+	private static final long serialVersionUID = 1L;
 	private BookDAOImpl dao = new BookDAOImpl();
 
 	@Override
