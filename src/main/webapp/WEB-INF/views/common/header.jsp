@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c"%>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/search.css">
+
 <header class="site-header">
 
     <div class="header-top">
@@ -70,10 +70,11 @@
         <div class="container">
             <a href="${pageContext.request.contextPath}/" class="nav-item active">Trang chủ</a>
             <a href="${pageContext.request.contextPath}/products" class="nav-item">Sản phẩm</a>
-            <a href="${pageContext.request.contextPath}/authors" class="nav-item">Tác giả</a>
+            <a href="#" class="nav-item">Tác giả</a>
+            <a href="#" class="nav-item">Liên hệ</a>
         </div>
     </nav>
-
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/search.css">
 <script>
     const contextPath = "${pageContext.request.contextPath}";
 </script>

@@ -91,7 +91,7 @@
 
 	<!-- IMPORT JS -->
 	<script
-		src="${pageContext.request.contextPath}/assets/js/book_detail.js?v=3"></script>
+		src="${pageContext.request.contextPath}/assets/js/book_detail.js"></script>
 
 </body>
 </html>

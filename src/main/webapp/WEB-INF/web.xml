@@ -83,14 +83,4 @@
     <servlet-name>AdminConfirmOrderServlet</servlet-name>
     <url-pattern>/AdminConfirmOrderServlet</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>AuthorServlet</display-name>
-    <servlet-name>AuthorServlet</servlet-name>
-    <servlet-class>controller.book.AuthorServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AuthorServlet</servlet-name>
-    <url-pattern>/AuthorServlet</url-pattern>
-  </servlet-mapping>
 </web-app>
