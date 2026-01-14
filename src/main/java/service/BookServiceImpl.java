@@ -1,9 +1,16 @@
 package service;
 
 import dao.*;
+import model.AuthorStats;
 import model.Book;
+import model.Category;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class BookServiceImpl implements IBookService {
 
@@ -54,5 +61,12 @@ public class BookServiceImpl implements IBookService {
 
 		bookDAO.insertActive(b);
 	}
-
+	@Override
+	public List<AuthorStats> getTopAuthors(int limit) {
+		 return bookDAO.findTopAuthors(limit);
+	}
+	@Override
+	public Map<Category, List<Book>> getBooksGroupedByCategory(int limitPerCategory) {
+	    return bookDAO.findGroupedByCategory(limitPerCategory);
+	}
 }
