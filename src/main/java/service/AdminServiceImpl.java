@@ -14,23 +14,47 @@ public class AdminServiceImpl implements IAdminService {
 
 	private IAdminDAO dao = new AdminDAOImpl();
 
-    public int countUsers() { return dao.count("users"); }
-    public int countOrders() { return dao.count("orders"); }
-    public int countBooks() { return dao.count("books"); }
-    public BigDecimal totalRevenue() { return dao.totalRevenue(); }
+	public int countUsers() {
+		return dao.count("users");
+	}
 
-    public List<Book> getAllBooks() { return dao.getAllBooks(); }
-    public void deleteBook(int id) { dao.deleteBook(id); }
+	public int countOrders() {
+		return dao.count("orders");
+	}
 
-    public List<Order> getAllOrders() { return dao.getAllOrders(); }
-    public void updateOrderStatus(int orderId, String status) {
-        dao.updateOrderStatus(orderId, status);
-    }
+	public int countBooks() {
+		return dao.count("books");
+	}
 
-    public List<User> getAllUsers() { return dao.getAllUsers(); }
-    public void toggleUser(int userId, boolean active) {
-        dao.toggleUser(userId, active);
-    }
-    public void updateBookStatus(int id, String s) throws SQLException { dao.updateBookStatus(id, s); }
+	public BigDecimal totalRevenue() {
+		return dao.totalRevenue();
+	}
+
+	public List<Book> getAllBooks() {
+		return dao.getAllBooks();
+	}
+
+	public void deleteBook(int id) {
+		dao.deleteBook(id);
+	}
+
+	public List<Order> getAllOrders() {
+		return dao.getAllOrders();
+	}
+
+	public void updateOrderStatus(int orderId, String status) {
+		dao.updateOrderStatus(orderId, status);
+	}
+
+	public List<User> getAllUsers() {
+		return dao.getAllUsers();
+	}
+
+	public void toggleUser(int userId, boolean active) {
+		dao.toggleUser(userId, active);
+	}
+
+	public void updateBookStatus(int id, String s) throws SQLException {
+		dao.updateBookStatus(id, s);
+	}
 }
-

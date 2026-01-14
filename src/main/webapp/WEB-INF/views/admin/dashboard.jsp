@@ -1,19 +1,25 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<h2>Admin Dashboard</h2>
-<ul>
-    <li>Users: ${userCount}</li>
-    <li>Orders: ${orderCount}</li>
-    <li>Books: ${bookCount}</li>
-    <li>Revenue: ${revenue}</li>
-</ul>
+<%@ page contentType="text/html; charset=UTF-8" %>
 
-</body>
-</html>
+<h2>Dashboard</h2>
+
+<div class="dashboard">
+    <div class="card blue">
+        <h3>Tổng User</h3>
+        <p>${totalUsers}</p>
+    </div>
+
+    <div class="card green">
+        <h3>Sách chờ duyệt</h3>
+        <p>${pendingBooks}</p>
+    </div>
+
+    <div class="card orange">
+        <h3>Đơn hàng</h3>
+        <p>${totalOrders}</p>
+    </div>
+
+    <div class="card red">
+        <h3>Doanh thu</h3>
+        <p>${totalRevenue}</p>
+    </div>
+</div>

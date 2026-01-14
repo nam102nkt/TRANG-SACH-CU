@@ -136,34 +136,6 @@ public class BookDAOImpl implements IBookDAO {
 		return list;
 	}
 
-//    @Override
-//    public int insertBook(Book b) {
-//        String sql = "INSERT INTO books(title,author,price,description,image_url,status,"
-//        		+ "seller_id,condition,category_id,created_at)"
-//        		+ "VALUES(?,?,?,?,?,'PENDING',?,?,?,GETDATE())";
-//
-//        try (Connection c = DBContext.getConnection();
-//             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-//
-//            ps.setString(1, b.getTitle());
-//            ps.setString(2, b.getAuthor());
-//            ps.setBigDecimal(3, b.getPrice());
-//            ps.setString(4, b.getDescription());
-//            ps.setString(5, b.getImageUrl());
-//            ps.setInt(6, b.getSellerId());
-//            ps.setString(7, b.getCondition());
-//            ps.setInt(8, b.getCategoryId());
-//
-//            ps.executeUpdate();
-//            ResultSet rs = ps.getGeneratedKeys();
-//            if (rs.next()) return rs.getInt(1);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return -1;
-//    }
-
 	@Override
 	public List<Book> getBooksByIds(List<Integer> ids) {
 		if (ids == null || ids.isEmpty())

@@ -13,7 +13,7 @@ import dao.IBookDAO;
 /**
  * Servlet implementation class AdminApproveBookServlet
  */
-@WebServlet("/admin/approve-book")
+@WebServlet("/admin/books/approve")
 public class AdminApproveBookServlet extends HttpServlet {
 
     private IBookDAO bookDAO = new BookDAOImpl();
@@ -32,5 +32,10 @@ public class AdminApproveBookServlet extends HttpServlet {
         }
 
         response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    	doPost(request, response);
     }
 }

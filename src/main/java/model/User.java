@@ -17,6 +17,7 @@ public class User implements Serializable{
 	
 	public User( String fullName, String email, String password, String phone, String role) {
 //		this.id = id;
+		if (!email.matches(".+@.+\\..+")) throw new IllegalArgumentException("Invalid email");
 		this.fullName = fullName;
 		this.email = email;
 		this.password = password;

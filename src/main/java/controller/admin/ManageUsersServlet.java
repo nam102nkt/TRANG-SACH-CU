@@ -18,16 +18,19 @@ public class ManageUsersServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private IAdminService service = new AdminServiceImpl();
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("users", service.getAllUsers());
-        req.getRequestDispatcher("/WEB-INF/views/admin/manage_users.jsp").forward(req, resp);
-    }
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setAttribute("users", service.getAllUsers());
 
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        service.toggleUser(
-            Integer.parseInt(req.getParameter("id")),
-            Boolean.parseBoolean(req.getParameter("active"))
-        );
-        resp.sendRedirect(req.getContextPath() + "/admin/users");
-    }
+		req.setAttribute("contentPage", "users.jsp");
+
+		// 🔥 LUÔN forward về admin.jsp
+		req.getRequestDispatcher("/WEB-INF/views/admin/admin.jsp").forward(req, resp);
+		
+//        req.getRequestDispatcher("/WEB-INF/views/admin/users.jsp").forward(req, resp);
+	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		service.toggleUser(Integer.parseInt(req.getParameter("id")), Boolean.parseBoolean(req.getParameter("active")));
+		resp.sendRedirect(req.getContextPath() + "/admin/users");
+	}
 }

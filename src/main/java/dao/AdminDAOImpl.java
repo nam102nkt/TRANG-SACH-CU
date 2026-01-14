@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Book;
@@ -49,10 +50,32 @@ public class AdminDAOImpl implements IAdminDAO {
 
 
 	@Override
-	public List<Book> getAllBooks() {
-		// TODO Auto-generated method stub
-		return null;
+	public int countBooks() {
+		return count("books");
 	}
+	
+	@Override
+	public List<Book> getAllBooks() {
+	    List<Book> list = new ArrayList<>();
+	    String sql = "SELECT * FROM books WHERE status='PENDING'";
+
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            Book b = new Book();
+	            b.setId(rs.getInt("id"));
+	            b.setTitle(rs.getString("title"));
+	            b.setPrice(rs.getBigDecimal("price"));
+	            list.add(b);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+
 
 	@Override
 	public void deleteBook(int id) {
@@ -61,21 +84,83 @@ public class AdminDAOImpl implements IAdminDAO {
 	}
 
 	@Override
+	public int countOrders() {
+		return count("orders");
+	}
+
 	public List<Order> getAllOrders() {
-		// TODO Auto-generated method stub
-		return null;
+	    List<Order> list = new ArrayList<>();
+	    String sql = "SELECT o.*, u.username"
+	    		+ "FROM orders o"
+	    		+ "JOIN users u ON o.user_id = u.id";
+
+	    try (Connection con = DBContext.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            Order o = new Order();
+	            o.setId(rs.getInt("id"));
+	            o.setFullName(rs.getString("username"));
+	            o.setTotalPrice(rs.getBigDecimal("total_price"));
+	            o.setStatus(rs.getString("status"));
+	            list.add(o);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+
+	public void updateOrderStatus(int id, String status) {
+	    String sql = "UPDATE orders SET status=? WHERE id=?";
+	    try (Connection con = DBContext.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+	        ps.setString(1, status);
+	        ps.setInt(2, id);
+	        ps.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override
-	public void updateOrderStatus(int orderId, String status) {
-		// TODO Auto-generated method stub
-		
+	public int countUsers() {
+		return count("users");
 	}
-
-	@Override
+	
 	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+	    List<User> list = new ArrayList<>();
+	    String sql = "SELECT * FROM users";
+
+	    try (Connection con = DBContext.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            User u = new User();
+	            u.setId(rs.getInt("id"));
+	            u.setFullName(rs.getString("username"));
+	            u.setRole(rs.getString("role"));
+	            u.setRole(rs.getString("status"));
+	            list.add(u);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+
+	public void updateUserStatus(int id, String status) {
+	    String sql = "UPDATE users SET status=? WHERE id=?";
+	    try (Connection con = DBContext.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
+	        ps.setString(1, status);
+	        ps.setInt(2, id);
+	        ps.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override

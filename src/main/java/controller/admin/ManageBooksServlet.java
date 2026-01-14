@@ -27,9 +27,15 @@ public class ManageBooksServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Book> pendingBooks = bookDAO.findPendingBooks();
-        request.setAttribute("pendingBooks", pendingBooks);
-        request.getRequestDispatcher("/WEB-INF/views/admin/manage_books.jsp").forward(request, response);
+        List<Book> books = service.getAllBooks();
+        request.setAttribute("books", books);
+        
+        request.setAttribute("contentPage", "/WEB-INF/views/admin/books.jsp");
+
+		// 🔥 LUÔN forward về admin.jsp
+        request.getRequestDispatcher("/WEB-INF/views/admin/admin.jsp").forward(request, response);
+        
+//        request.getRequestDispatcher("/WEB-INF/views/admin/books.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

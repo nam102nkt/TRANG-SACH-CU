@@ -24,7 +24,12 @@ public class AdminDashboardServlet extends HttpServlet {
         req.setAttribute("bookCount", service.countBooks());
         req.setAttribute("revenue", service.totalRevenue());
 
-        req.getRequestDispatcher("/WEB-INF/views/admin/admin.jsp").forward(req, resp);
+		req.setAttribute("contentPage", "/WEB-INF/views/admin/dashboard.jsp");
+
+		// 🔥 LUÔN forward về admin.jsp
+		req.getRequestDispatcher("/WEB-INF/views/admin/admin.jsp").forward(req, resp);
+        
+//        req.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(req, resp);
     }
 
 	/**

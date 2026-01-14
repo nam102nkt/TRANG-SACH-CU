@@ -20,7 +20,13 @@ public class ManageOrdersServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("orders", service.getAllOrders());
-        req.getRequestDispatcher("/WEB-INF/views/admin/manage_orders.jsp").forward(req, resp);
+        
+		req.setAttribute("contentPage", "/WEB-INF/views/admin/orders.jsp");
+
+		// 🔥 LUÔN forward về admin.jsp
+		req.getRequestDispatcher("/WEB-INF/views/admin/admin.jsp").forward(req, resp);
+        
+//        req.getRequestDispatcher("/WEB-INF/views/admin/orders.jsp").forward(req, resp);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
