@@ -1,6 +1,7 @@
 package dao;
 
 import model.Book;
+import model.AuthorStats;
 import model.Category;
 import java.sql.*;
 import java.util.*;
@@ -355,6 +356,95 @@ public class BookDAOImpl implements IBookDAO {
 		}
 	    return list;
 	}
+public List<AuthorStats> findTopAuthors(int limit) {
+	    List<AuthorStats> list = new ArrayList<>();
+	    String sql = "SELECT TOP (?) author, COUNT(*) AS total "
+	    		+ "FROM books "
+	    		+ "WHERE status = 'ACTIVE' "
+	    		+ "GROUP BY author "
+	    		+ "ORDER BY total DESC";
 
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql)) {
+
+	        ps.setInt(1, limit);
+	        ResultSet rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            AuthorStats a = new AuthorStats();
+	            a.setAuthor(rs.getString("author"));
+	            a.setTotalBooks(rs.getInt("total"));
+	            list.add(a);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+	public List<AuthorStats> getAllAuthors() {
+	    String sql = "SELECT author, COUNT(*) AS cnt "
+	    		+ "FROM books "
+	    		+ "WHERE status = 'ACTIVE' "
+	    		+ "GROUP BY author "
+	    		+ "ORDER BY cnt DESC";
+
+	    List<AuthorStats> list = new ArrayList<>();
+
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+	            list.add(new AuthorStats(
+	                rs.getString("author"),
+	                rs.getInt("cnt")
+	            ));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
+	
+	public Map<Category, List<Book>> findGroupedByCategory(int limitEach) {
+	    Map<Integer, Category> catMap = new LinkedHashMap<>();
+	    Map<Category, List<Book>> result = new LinkedHashMap<>();
+
+	    String sql = "SELECT c.id AS cid, c.name AS cname, b.* "
+	    		+ "FROM categories c "
+	    		+ "JOIN books b ON b.category_id = c.id "
+	    		+ "WHERE b.status = 'ACTIVE' "
+	    		+ "ORDER BY c.name, b.created_at DESC";
+
+	    try (Connection c = DBContext.getConnection();
+	         PreparedStatement ps = c.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery()) {
+
+	        while (rs.next()) {
+
+	            int cid = rs.getInt("cid");
+	            Category cat = catMap.get(cid);
+
+	            if (cat == null) {
+	                cat = new Category();
+	                cat.setId(cid);
+	                cat.setName(rs.getString("cname"));
+	                catMap.put(cid, cat);
+	                result.put(cat, new ArrayList<>());
+	            }
+
+	            List<Book> books = result.get(cat);
+	            if (books.size() < limitEach) {
+	                books.add(map(rs));
+	            }
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return result;
+	}
 
 }
