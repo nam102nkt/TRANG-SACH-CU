@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
+
 
 <!DOCTYPE html>
 <html>
@@ -76,6 +78,47 @@
 
 			</div>
 		</section>
+		<section class="author-section">
+			<h2>Tác giả nổi bật</h2>
+			<div class="author-list">
+				<c:forEach items="${topAuthors}" var="a">
+					<div class="author-card">
+						<div class="author-avatar">
+							<img
+								src="${pageContext.request.contextPath}/assets/images/user_icon.png">
+						</div>
+						<div class="author-name">${a.author}</div>
+					</div>
+				</c:forEach>
+
+			</div>
+		</section>
+		<div></div>
+		<c:forEach items="${booksByCategory}" var="entry">
+			<section class="category-section">
+				<div class="container">
+					<div class="section-header">
+						<h2 class="section-title">${entry.key.name}</h2>
+						<div class="title-underline"></div>
+					</div>
+
+					<div class="book-grid">
+						<c:forEach items="${entry.value}" var="book">
+							<c:set var="book" value="${book}" scope="request" />
+							<jsp:include page="/WEB-INF/views/book/book_card.jsp" />
+						</c:forEach>
+					</div>
+
+					<div class="view-more-area">
+						<a
+							href="${pageContext.request.contextPath}/products?category=${entry.key.id}"
+							class="btn-view-more">Xem thêm</a>
+					</div>
+				</div>
+			</section>
+		</c:forEach>
+
+
 	</main>
 
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />

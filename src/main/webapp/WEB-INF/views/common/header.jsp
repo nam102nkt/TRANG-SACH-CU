@@ -70,8 +70,7 @@
         <div class="container">
             <a href="${pageContext.request.contextPath}/" class="nav-item active">Trang chủ</a>
             <a href="${pageContext.request.contextPath}/products" class="nav-item">Sản phẩm</a>
-            <a href="#" class="nav-item">Tác giả</a>
-            <a href="#" class="nav-item">Liên hệ</a>
+            <a href="${pageContext.request.contextPath}/authors" class="nav-item">Tác giả</a>
         </div>
     </nav>
 
