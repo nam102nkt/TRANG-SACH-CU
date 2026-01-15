@@ -73,7 +73,7 @@ public class BookDAOImpl implements IBookDAO {
 
 	@Override
 	public List<Book> search(String keyword) {
-		String sql = "SELECT * FROM books WHERE title LIKE ? OR author LIKE ?";
+	String sql = "SELECT * FROM books WHERE status = 'ACTIVE' AND (title LIKE ? OR author LIKE ?)";
 		List<Book> list = new ArrayList<>();
 
 		try (Connection c = DBContext.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
