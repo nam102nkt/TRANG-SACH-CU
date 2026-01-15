@@ -26,7 +26,7 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
     	List<Book> featuredBooks = bookService.getFeaturedBooks();
     	List<AuthorStats> topAuthors = bookService.getTopAuthors(6);
-    	Map<Category, List<Book>> booksByCategory = bookService.getBooksGroupedByCategory(6);
+    	Map<Category, List<Book>> booksByCategory = bookService.getBooksGroupedByCategory(4);
 
         request.setAttribute("featuredBooks", featuredBooks);
         request.setAttribute("topAuthors", topAuthors);

@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title> Bạn không có quyền truy cập</title>
 </head>
 <body>
-
+<h1> Bạn không có quyền truy cập</h1>
 </body>
 </html>

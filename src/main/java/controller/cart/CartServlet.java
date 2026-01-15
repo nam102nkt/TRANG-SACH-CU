@@ -10,20 +10,20 @@ import model.Cart;
 import java.io.IOException;
 
 /**
- * CartServlet handles adding/removing/updating items in cart saved in session.
+ * CartServlet xử lý việc thêm/xóa/cập nhật các mặt hàng trong giỏ hàng được lưu trong session.
  *
- * Supported actions (via request parameter "action"): - add : adds book to cart
- * (requires id and optional qty) - remove : removes book from cart (requires
- * id) - update : updates quantities from form parameters (POST)
+ * Các hành động được hỗ trợ (qua tham số yêu cầu "action"): - add : thêm sách vào giỏ hàng
+ * (yêu cầu id và số lượng tùy chọn) - remove : xóa sách khỏi giỏ hàng (yêu cầu
+ * id) - update : cập nhật số lượng từ các tham số form (POST)
  *
- * All operations redirect back to cart.jsp to show current cart.
+ * Tất cả các hoạt động sẽ chuyển hướng trở lại cart.jsp để hiển thị giỏ hàng hiện tại.
  */
 @WebServlet("/cart")
 public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private BookDAOImpl bookDAO = new BookDAOImpl();
 
-	/** Handle GET for add/remove and show */
+	/** Xử lý GET cho thêm/xóa và hiển thị */
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
 		HttpSession session = req.getSession();
@@ -44,7 +44,7 @@ public class CartServlet extends HttpServlet {
 					cart.add(b, qty);
 				}
 			} catch (Exception e) {
-				// ignore bad input
+				e.getMessage();
 			}
 			resp.sendRedirect(req.getContextPath() + "/cart");
 			return;
@@ -53,16 +53,16 @@ public class CartServlet extends HttpServlet {
 				int id = Integer.parseInt(req.getParameter("id"));
 				cart.remove(id);
 			} catch (Exception e) {
+				e.getMessage();
 			}
 			resp.sendRedirect(req.getContextPath() + "/cart");
 			return;
 		}
 
-		// default: forward to cart.jsp
 		req.getRequestDispatcher("/WEB-INF/views/cart/cart.jsp").forward(req, resp);
 	}
 
-	/** Handle POST for bulk update of quantities from cart form */
+	/** Xử lý POST để cập nhật hàng loạt số lượng từ form giỏ hàng */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		Cart cart = (Cart) session.getAttribute("cart");
@@ -79,7 +79,7 @@ public class CartServlet extends HttpServlet {
 					int qty = Integer.parseInt(req.getParameter(name));
 					cart.update(bookId, qty);
 				} catch (Exception e) {
-					/* ignore bad input */ }
+					e.getMessage(); }
 			}
 		}
 		resp.sendRedirect(req.getContextPath() + "/cart");
